@@ -1,12 +1,12 @@
 # MageHud
 
-MageHUD displays smooth arcs around your character in the middle of the screen to inform you about the health and power (mana, rage, ...) of you, your pet, and your target.
+MageHUD is a fork of ArcHud with some of the same original arcs and additional arcs for mage shields.
 
-<img src="https://repository-images.githubusercontent.com/634165007/8ab8774e-8ce9-40d4-ae04-9d3ba383bdf6" alt="MageHud preview" height="240" style="margin-left: -1000px">
+![image](https://github.com/pepopo978/MageHud/assets/149287158/06d336c8-6fc7-4398-a7dc-c47c4ee5b665)
 
 ### About this repository
 
-This is a mirror of the final release of MageHud, which is the last version that works on Vanilla WoW 1.12 (and Turtle WoW). It is *not* compatible with Classic or Retail; for that, see [MageHUD3](https://github.com/nyyr/MageHUD3).
+This is build specifically for turtle wow and requires https://github.com/balakethelock/SuperWoW
 
 ## Installation
 
