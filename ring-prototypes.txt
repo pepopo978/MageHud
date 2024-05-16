@@ -1,14 +1,14 @@
-ArcHUD Rings support
+MageHUD Rings support
 ---------------------
 
-Since 1.2 ArcHUD's rings have been completely reworked. Every ring are now created from
+Since 1.2 MageHUD's rings have been completely reworked. Every ring are now created from
 a base class. This class has a few predefined functions and behind-the-scenes functionality.
-This makes it very easy to add your own rings to ArcHUD. If you want to add your own ring to
-ArcHUD there are a few guidelines you need to follow. What will follow below is a basic setup
+This makes it very easy to add your own rings to MageHUD. If you want to add your own ring to
+MageHUD there are a few guidelines you need to follow. What will follow below is a basic setup
 to get a ring up and running.
 
-Rings created can be added as a new addon with ArcHUD as a dependency. This is the preferred way
-to add your own custom rings to ArcHUD.
+Rings created can be added as a new addon with MageHUD as a dependency. This is the preferred way
+to add your own custom rings to MageHUD.
 
 First you will need to create your ring object, if you've worked with Ace2 addons previously this
 will be very similar to how you create an addon with Ace2. Alot of things will be set up for you
@@ -17,7 +17,7 @@ the database you use the object self.db. To access the locale table you use self
 about these objects at the WoWAce Wiki at http://wiki.wowace.com/index.php/Ace2.
 
 -------------------------------------------------------------------
-local module = ArcHUD:NewModule("MyRing")
+local module = MageHUD:NewModule("MyRing")
 module.unit = "player"
 defaults = {
 	Enabled = true,
@@ -30,7 +30,7 @@ options = {
 
 This will create a module with the name MyRing and a few default options.
 All options needed for the ring are specified in the defaults table. They are automatically added to
-the ArcHUD DB when you load the ring.
+the MageHUD DB when you load the ring.
 
 There are few base methods you will need to get the ring set up. These are Initialize and Enable.
 If you don't have the Initialize method the ring wont load. Initialize is a good place to create
@@ -38,13 +38,13 @@ any frames the ring will use, for example the ring frame itself.
 
 -------------------------------------------------------------------
 function module:Initialize()
-	self.f = self:CreateRing(true, ArcHUDFrame)
+	self.f = self:CreateRing(true, MageHUDFrame)
 	self.f:SetPoint("TOPLEFT", self.parent:GetModule("Anchors").Left, "TOPLEFT", -30, 0);
 end
 -------------------------------------------------------------------
 
 We've now created a ring with a background outline and stored it in self.f. The ring is now a
-child frame of ArcHUDFrame, the main frame for ArcHUD. It has also been positioned onto the left
+child frame of MageHUDFrame, the main frame for MageHUD. It has also been positioned onto the left
 anchor as the second ring from the center. Attaching to the anchors will make sure the ring follows
 the width option.
 
@@ -76,9 +76,9 @@ end
 
 function module:UpdateAlpha()
 	if(self.f.startValue < self.f.maxValue) then
-		self.f:SetRingAlpha(ArcHUD.FadeOOC)
+		self.f:SetRingAlpha(MageHUD.FadeOOC)
 	else
-		self.f:SetRingAlpha(ArcHUD.FadeFull)
+		self.f:SetRingAlpha(MageHUD.FadeFull)
 	end
 end
 -------------------------------------------------------------------
@@ -96,7 +96,7 @@ This is a very basic ring and will probably not do very much good. At least you 
 start from. I suggest you look at the other rings to get a better understanding of how it all works.
 
 
-ArcHUDRing reference
+MageHUDRing reference
 ---------------------
 
 SPECIAL TABLES

@@ -1,0 +1,49 @@
+## Interface: 11200
+## Title: MageHUD |cff7fff7f -Ace2-|r
+## Notes: Mage HUD based on NurfedHUD.
+## Author: Uruloke, Balakinuser, Pepopo
+## SavedVariables: MageHUDDB
+## Version: 2.0
+## X-Date: $Date: 2006-09-16 18:32:57 +0600 (Сб, 16 сен 2006) $
+## X-Category: Interface Enhancements
+## X-RelSite-Curse: 3153
+## X-RelSite-UI.WoW: 1950
+## X-AceForum: 1896
+## OptionalDeps: Ace2, FuBar, FuBarPlugin-2.0, CompostLib, DewDropLib, MetrognomeLib, TabletLib
+## X-Embeds: Ace2, FuBarPlugin-2.0, CompostLib, DewDropLib, MetrognomeLib, TabletLib
+
+# Libraries
+Libs\AceLibrary\AceLibrary.lua
+Libs\Compost\Compost-2.0.lua
+Libs\AceOO\AceOO-2.0.lua
+Libs\AceConsole\AceConsole-2.0.lua
+Libs\AceEvent\AceEvent-2.0.lua
+Libs\AceAddon\AceAddon-2.0.lua
+Libs\AceHook\AceHook-2.0.lua
+Libs\AceDB\AceDB-2.0.lua
+Libs\AceDebug\AceDebug-2.0.lua
+Libs\AceLocale\AceLocale-2.0.lua
+Libs\AceModuleCore\AceModuleCore-2.0.lua
+Libs\Metrognome\Metrognome-2.0.lua
+Libs\Dewdrop\Dewdrop-2.0.lua
+Libs\Tablet\Tablet-2.0.lua
+Libs\FuBarPlugin\FuBarPlugin-2.0.lua
+
+# Core addon
+Locale_enUS.lua
+Core.xml
+Core.lua
+Utils.lua
+RingTemplate.lua
+ModuleCore.lua
+FuBarPlugin.lua
+
+# Rings
+Rings\Anchors.lua
+Rings\Health.lua
+Rings\Mana.lua
+Rings\Casting.lua
+Rings\ShieldCombined.lua
+Rings\ShieldIceBarrier.lua
+Rings\ShieldMana.lua
+

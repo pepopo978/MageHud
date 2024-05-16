@@ -1,9 +1,9 @@
-local module = ArcHUD:NewModule("Casting")
+local module = MageHUD:NewModule("Casting")
 local _, _, rev = string.find("$Rev: 11018 $", "([0-9]+)")
 module.version = "2.0." .. rev
 module.unit = "player"
 module.defaults = {
-	Enabled = true,
+	Enabled = false,
 	Outline = true,
 	ShowSpell = true,
 	ShowTime = true,
@@ -25,10 +25,9 @@ module.disableEvents = {
 
 function module:Initialize()
 	-- Setup the frame we need
-	self.f = self:CreateRing(true, ArcHUDFrame)
-	self.f:SetAlpha(0)
+	self.f = self:CreateRing(true, MageHUDFrame)
 
-	self.Text = self:CreateFontString(self.f, "BACKGROUND", {175, 14}, 12, "LEFT", {1.0, 1.0, 1.0}, {"TOP", "ArcHUDFrameCombo", "BOTTOM", -28, 0})
+	self.Text = self:CreateFontString(self.f, "BACKGROUND", {175, 14}, 12, "LEFT", {1.0, 1.0, 1.0}, {"TOP", "MageHUDFrameText", "BOTTOM", -28, 0})
 	self.Time = self:CreateFontString(self.f, "BACKGROUND", {40, 14}, 12, "RIGHT", {1.0, 1.0, 1.0}, {"TOPLEFT", self.Text, "TOPRIGHT", 0, 0})
 
 	-- Register timers
@@ -210,10 +209,10 @@ function module:Taxi()
 				self.f:SetValue(self.taxiDur)
 				self.taxiDur = nil
 				self.f:UpdateColor({["r"] = 0.3, ["g"] = 0.3, ["b"] = 1.0})
-				if(ArcHUD.db.profile.FadeIC > ArcHUD.db.profile.FadeOOC) then
-					self.f:SetRingAlpha(ArcHUD.db.profile.FadeIC)
+				if(MageHUD.db.profile.FadeIC > MageHUD.db.profile.FadeOOC) then
+					self.f:SetRingAlpha(MageHUD.db.profile.FadeIC)
 				else
-					self.f:SetRingAlpha(ArcHUD.db.profile.FadeOOC)
+					self.f:SetRingAlpha(MageHUD.db.profile.FadeOOC)
 				end
 			end
 			return
@@ -243,10 +242,10 @@ function module:SPELLCAST_START()
 	self.channeling = 0
 	self.spellstart = GetTime()
 	self.stopSet = false
-	if(ArcHUD.db.profile.FadeIC > ArcHUD.db.profile.FadeOOC) then
-		self.f:SetRingAlpha(ArcHUD.db.profile.FadeIC)
+	if(MageHUD.db.profile.FadeIC > MageHUD.db.profile.FadeOOC) then
+		self.f:SetRingAlpha(MageHUD.db.profile.FadeIC)
 	else
-		self.f:SetRingAlpha(ArcHUD.db.profile.FadeOOC)
+		self.f:SetRingAlpha(MageHUD.db.profile.FadeOOC)
 	end
 end
 
@@ -259,10 +258,10 @@ function module:SPELLCAST_CHANNEL_START()
 	self.channeling = 1
 	self.f.casting = 1
 	self.spellstart = GetTime()
-	if(ArcHUD.db.profile.FadeIC > ArcHUD.db.profile.FadeOOC) then
-		self.f:SetRingAlpha(ArcHUD.db.profile.FadeIC)
+	if(MageHUD.db.profile.FadeIC > MageHUD.db.profile.FadeOOC) then
+		self.f:SetRingAlpha(MageHUD.db.profile.FadeIC)
 	else
-		self.f:SetRingAlpha(ArcHUD.db.profile.FadeOOC)
+		self.f:SetRingAlpha(MageHUD.db.profile.FadeOOC)
 	end
 end
 

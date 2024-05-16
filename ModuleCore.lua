@@ -4,17 +4,17 @@ local d_info = 2
 local d_notice = 3
 
 -- Set mixins and libraries
-ArcHUD:SetModuleMixins("AceEvent-2.0", "AceHook-2.0", "Metrognome-2.0")
-ArcHUD.modulePrototype.parent = ArcHUD
+MageHUD:SetModuleMixins("AceEvent-2.0", "AceHook-2.0", "Metrognome-2.0")
+MageHUD.modulePrototype.parent = MageHUD
 
 -- Debug function uses the core :Debug function
-function ArcHUD.modulePrototype:Debug(level, ...)
+function MageHUD.modulePrototype:Debug(level, ...)
 	if(self.parent.LevelDebug) then
 		self.parent:LevelDebug(level, "["..self.name.."] "..unpack(arg))
 	end
 end
 
-function ArcHUD.modulePrototype:RegisterDewdropSettings()
+function MageHUD.modulePrototype:RegisterDewdropSettings()
 	table.insert(self.parent.dewdrop_menu.L1, {"text", self.L(self.name), "hasArrow", true, "value", "L2_"..self.name})
 
 	self.parent.dewdrop_menu["L2_"..self.name] = {
@@ -36,7 +36,7 @@ function ArcHUD.modulePrototype:RegisterDewdropSettings()
 			"tooltipTitle", self.L("TEXT","ENABLED"),
 			"tooltipText", self.L("TOOLTIP","ENABLED"),
 			"checked", false,
-			"func", ArcHUD.modDB,
+			"func", MageHUD.modDB,
 			"arg1", "toggle",
 			"arg2", "Enabled",
 			"arg3", self.name
@@ -46,7 +46,7 @@ function ArcHUD.modulePrototype:RegisterDewdropSettings()
 			"tooltipTitle", self.L("TEXT","OUTLINE"),
 			"tooltipText", self.L("TOOLTIP","OUTLINE"),
 			"checked", false,
-			"func", ArcHUD.modDB,
+			"func", MageHUD.modDB,
 			"arg1", "toggle",
 			"arg2", "Outline",
 			"arg3", self.name
@@ -60,7 +60,7 @@ function ArcHUD.modulePrototype:RegisterDewdropSettings()
 				"tooltipTitle", self.L("TEXT",v.text),
 				"tooltipText", self.L("TOOLTIP",v.tooltip),
 				"checked", false,
-				"func", ArcHUD.modDB,
+				"func", MageHUD.modDB,
 				"arg1", "toggle",
 				"arg2", v.name,
 				"arg3", self.name
@@ -83,7 +83,7 @@ function ArcHUD.modulePrototype:RegisterDewdropSettings()
 				"text", self.L("SIDE","LEFT"),
 				"isRadio", true,
 				"checked", true,
-				"func", ArcHUD.modDB,
+				"func", MageHUD.modDB,
 				"arg1", "set",
 				"arg2", "Side",
 				"arg3", self.name,
@@ -93,7 +93,7 @@ function ArcHUD.modulePrototype:RegisterDewdropSettings()
 				"text", self.L("SIDE","RIGHT"),
 				"isRadio", true,
 				"checked", false,
-				"func", ArcHUD.modDB,
+				"func", MageHUD.modDB,
 				"arg1", "set",
 				"arg2", "Side",
 				"arg3", self.name,
@@ -110,7 +110,7 @@ function ArcHUD.modulePrototype:RegisterDewdropSettings()
 			"sliderMax", 5,
 			"sliderStep", 1,
 			"sliderValue", 0,
-			"sliderFunc", ArcHUD.modDB,
+			"sliderFunc", MageHUD.modDB,
 			"sliderArg1", "set",
 			"sliderArg2", "Level",
 			"sliderArg3", self.name
@@ -123,21 +123,21 @@ end
 
 -- Enabling/Disabling
 
-function ArcHUD.modulePrototype:OnInitialize()
+function MageHUD.modulePrototype:OnInitialize()
 	self.parent:ToggleModuleActive(self, false)
 	self:Debug(d_notice, "Creating locale instance")
-	self.L = AceLibrary("AceLocale-2.0"):new("ArcHUD_Module")
+	self.L = AceLibrary("AceLocale-2.0"):new("MageHUD_Module")
 	if(self.Initialize) then
 		self:Initialize()
 		self:Debug(d_info, "Ring initialized")
-		self:RegisterEvent("ARCHUD_MODULE_ENABLE")
-		self:RegisterEvent("ARCHUD_MODULE_UPDATE")
+		self:RegisterEvent("MAGEHUD_MODULE_ENABLE")
+		self:RegisterEvent("MAGEHUD_MODULE_UPDATE")
 	else
 		self:Debug(d_warn, "Missing Initialize(). Aborting")
 		return
 	end
 	if(self.defaults and type(self.defaults) == "table") then
-		-- Add defaults to ArcHUD defaults table
+		-- Add defaults to MageHUD defaults table
 		self:Debug(d_notice, "Acquiring ring DB namespace")
 		self.db = self.parent:AcquireDBNamespace(self.name)
 		self:Debug(d_notice, "Registering ring default options")
@@ -163,18 +163,18 @@ function ArcHUD.modulePrototype:OnInitialize()
 
 	self:Debug(d_notice, "Registering Metrognome timers")
 	if(not self:MetroStatus(self.name .. "Alpha")) then
-		self:RegisterMetro(self.name .. "Alpha", ArcHUDRingTemplate.AlphaUpdate, 0.01, self.f)
+		self:RegisterMetro(self.name .. "Alpha", MageHUDRingTemplate.AlphaUpdate, 0.01, self.f)
 	end
 	if(not self:MetroStatus(self.name .. "Fade")) then
-		self:RegisterMetro(self.name .. "Fade", ArcHUDRingTemplate.DoFadeUpdate, 0.01, self.f)
+		self:RegisterMetro(self.name .. "Fade", MageHUDRingTemplate.DoFadeUpdate, 0.01, self.f)
 	end
 	if(not self:MetroStatus(self.name .. "Update")) then
-		self:RegisterMetro(self.name .. "Update", ArcHUDRingTemplate.UpdateAlpha, 0.05, self)
+		self:RegisterMetro(self.name .. "Update", MageHUDRingTemplate.UpdateAlpha, 0.05, self)
 	end
 	self:Debug(d_info, "Ring loaded")
 end
 
-function ArcHUD.modulePrototype:OnEnable()
+function MageHUD.modulePrototype:OnEnable()
 	self:Debug(d_notice, "Recieved enable event")
 	if(self.Enable and self.db.profile.Enabled) then
 		self:Debug(d_info, "Enabling ring")
@@ -201,9 +201,9 @@ function ArcHUD.modulePrototype:OnEnable()
 			self:Update()
 		end
 		self:Enable()
-		self:RegisterEvent("ARCHUD_MODULE_DISABLE")
-		if(not self:IsEventRegistered("ARCHUD_MODULE_UPDATE")) then
-			self:RegisterEvent("ARCHUD_MODULE_UPDATE")
+		self:RegisterEvent("MAGEHUD_MODULE_DISABLE")
+		if(not self:IsEventRegistered("MAGEHUD_MODULE_UPDATE")) then
+			self:RegisterEvent("MAGEHUD_MODULE_UPDATE")
 		end
 		self:Debug(d_info, "Ring enabled")
 	else
@@ -212,7 +212,7 @@ function ArcHUD.modulePrototype:OnEnable()
 	end
 end
 
-function ArcHUD.modulePrototype:OnDisable()
+function MageHUD.modulePrototype:OnDisable()
 	self:Debug(d_info, "Disabling ring")
 	if(self.disableEvents and self.eventsDisabled) then
 		self:Debug(d_notice, "Re-enabling events:")
@@ -234,18 +234,18 @@ function ArcHUD.modulePrototype:OnDisable()
 	if(self.Disable) then
 		self:Disable()
 	end
-	self:RegisterEvent("ARCHUD_MODULE_ENABLE")
-	self:RegisterEvent("ARCHUD_MODULE_UPDATE")
+	self:RegisterEvent("MAGEHUD_MODULE_ENABLE")
+	self:RegisterEvent("MAGEHUD_MODULE_UPDATE")
 	self:Debug(d_info, "Ring disabled")
 end
 
-function ArcHUD.modulePrototype:ARCHUD_MODULE_ENABLE()
+function MageHUD.modulePrototype:MAGEHUD_MODULE_ENABLE()
 	self.parent:ToggleModuleActive(self, true)
 end
-function ArcHUD.modulePrototype:ARCHUD_MODULE_DISABLE()
+function MageHUD.modulePrototype:MAGEHUD_MODULE_DISABLE()
 	self.parent:ToggleModuleActive(self, false)
 end
-function ArcHUD.modulePrototype:ARCHUD_MODULE_UPDATE(module)
+function MageHUD.modulePrototype:MAGEHUD_MODULE_UPDATE(module)
 	if(module == self.name) then
 		if(self.db.profile.Enabled and not self.parent:IsModuleActive(self)) then
 			self.parent:ToggleModuleActive(self, true)
@@ -261,7 +261,7 @@ function ArcHUD.modulePrototype:ARCHUD_MODULE_UPDATE(module)
 end
 
 -- Ring frame creation and setup
-function ArcHUD.modulePrototype:CreateRing(hasBG, parent)
+function MageHUD.modulePrototype:CreateRing(hasBG, parent)
 	-- Create frame
 	local f = CreateFrame("Frame", nil, parent)
 	f:SetFrameStrata("BACKGROUND")
@@ -275,27 +275,27 @@ function ArcHUD.modulePrototype:CreateRing(hasBG, parent)
 	f.quadrants = {}
 
 	t = f:CreateTexture(nil, "ARTWORK")
-	t:SetTexture("Interface\\Addons\\ArcHUD2\\Icons\\Ring.tga")
+	t:SetTexture("Interface\\Addons\\MageHud\\Icons\\Ring.tga")
 	t:SetAllPoints(f)
 	f.quadrants[1] = t
 
 	t = f:CreateTexture(nil, "ARTWORK")
-	t:SetTexture("Interface\\Addons\\ArcHUD2\\Icons\\Ring.tga")
+	t:SetTexture("Interface\\Addons\\MageHud\\Icons\\Ring.tga")
 	t:SetAllPoints(f)
 	f.quadrants[2] = t
 
 	t = f:CreateTexture(nil, "ARTWORK")
-	t:SetTexture("Interface\\Addons\\ArcHUD2\\Icons\\Ring.tga")
+	t:SetTexture("Interface\\Addons\\MageHud\\Icons\\Ring.tga")
 	t:SetAllPoints(f)
 	f.chip = t
 
 	t = f:CreateTexture(nil, "ARTWORK")
-	t:SetTexture("Interface\\Addons\\ArcHUD2\\Icons\\Slice.tga")
+	t:SetTexture("Interface\\Addons\\MageHud\\Icons\\Slice.tga")
 	t:SetAllPoints(f)
 	f.slice = t
 
 	-- Set up frame
-	ArcHUDRingTemplate:OnLoad(f)
+	MageHUDRingTemplate:OnLoad(f)
 
 	if(hasBG) then
 		-- Create frame
@@ -308,27 +308,27 @@ function ArcHUD.modulePrototype:CreateRing(hasBG, parent)
 		-- Set up textures
 		fBG.quadrants = {}
 		t = fBG:CreateTexture(nil, "BACKGROUND")
-		t:SetTexture("Interface\\Addons\\ArcHUD2\\Icons\\RingBG.tga")
+		t:SetTexture("Interface\\Addons\\MageHud\\Icons\\RingBG.tga")
 		t:SetAllPoints(fBG)
 		fBG.quadrants[1] = t
 
 		t = fBG:CreateTexture(nil, "BACKGROUND")
-		t:SetTexture("Interface\\Addons\\ArcHUD2\\Icons\\RingBG.tga")
+		t:SetTexture("Interface\\Addons\\MageHud\\Icons\\RingBG.tga")
 		t:SetAllPoints(fBG)
 		fBG.quadrants[2] = t
 
 		t = fBG:CreateTexture(nil, "BACKGROUND")
-		t:SetTexture("Interface\\Addons\\ArcHUD2\\Icons\\RingBG.tga")
+		t:SetTexture("Interface\\Addons\\MageHud\\Icons\\RingBG.tga")
 		t:SetAllPoints(fBG)
 		fBG.chip = t
 
 		t = fBG:CreateTexture(nil, "BACKGROUND")
-		t:SetTexture("Interface\\Addons\\ArcHUD2\\Icons\\Slice.tga")
+		t:SetTexture("Interface\\Addons\\MageHud\\Icons\\Slice.tga")
 		t:SetAllPoints(fBG)
 		fBG.slice = t
 
 		-- Set up frame
-		ArcHUDRingTemplate:OnLoadBG(fBG)
+		MageHUDRingTemplate:OnLoadBG(fBG)
 
 		f.BG = fBG
 	end
@@ -336,7 +336,7 @@ function ArcHUD.modulePrototype:CreateRing(hasBG, parent)
 	return f
 end
 
-function ArcHUD.modulePrototype:CreateFontString(parent, layer, size, fontsize, justify, color, point)
+function MageHUD.modulePrototype:CreateFontString(parent, layer, size, fontsize, justify, color, point)
 	local fs = parent:CreateFontString(nil, layer)
 	local width, height = unpack(size)
 
@@ -354,7 +354,7 @@ function ArcHUD.modulePrototype:CreateFontString(parent, layer, size, fontsize, 
 	return fs
 end
 
-function ArcHUD.modulePrototype:CreateTexture(parent, layer, size, texture, point)
+function MageHUD.modulePrototype:CreateTexture(parent, layer, size, texture, point)
 	local t = parent:CreateTexture(nil, layer)
 	local width, height = unpack(size)
 

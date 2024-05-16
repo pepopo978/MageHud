@@ -1,9 +1,9 @@
-local module = ArcHUD:NewModule("Mana")
+local module = MageHUD:NewModule("Mana")
 local _, _, rev = string.find("$Rev: 11018 $", "([0-9]+)")
 module.version = "2.0." .. rev
 module.unit = "player"
 module.defaults = {
-	Enabled = true,
+	Enabled = false,
 	Outline = true,
 	ShowText = true,
 	ShowPerc = true,
@@ -19,10 +19,10 @@ module.localized = true
 
 function module:Initialize()
 	-- Setup the frame we need
-	self.f = self:CreateRing(true, ArcHUDFrame)
-	self.f:SetAlpha(0)
+	self.f = self:CreateRing(true, MageHUDFrame)
 
-	self.MPText = self:CreateFontString(self.f, "BACKGROUND", {150, 15}, 14, "LEFT", {1.0, 1.0, 0.0}, {"TOPLEFT", ArcHUDFrameCombo, "TOPRIGHT", 0, 0})
+
+	self.MPText = self:CreateFontString(self.f, "BACKGROUND", {150, 15}, 14, "LEFT", {1.0, 1.0, 0.0}, {"TOPLEFT", MageHUDFrameText, "TOPRIGHT", 0, 0})
 	self.MPPerc = self:CreateFontString(self.f, "BACKGROUND", {40, 14}, 12, "LEFT", {1.0, 1.0, 1.0}, {"TOPLEFT", self.MPText, "BOTTOMLEFT", 0, 0})
 end
 

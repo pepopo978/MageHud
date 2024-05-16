@@ -1,4 +1,4 @@
-function ArcHUD:SplitString(s,p,n)
+function MageHUD:SplitString(s,p,n)
 	local l,sp,ep = {},0
 	while(sp) do
 		sp,ep=strfind(s,p)
@@ -15,6 +15,6 @@ function ArcHUD:SplitString(s,p,n)
 	return unpack(l)
 end
 
-function ArcHUD:strcap(str)
+function MageHUD:strcap(str)
    return strupper(strsub(str, 1, 1)) .. strlower(strsub(str, 2))
 end

@@ -1,9 +1,9 @@
-local module = ArcHUD:NewModule("Health")
+local module = MageHUD:NewModule("Health")
 local _, _, rev = string.find("$Rev: 11018 $", "([0-9]+)")
 module.version = "2.0." .. rev
 module.unit = "player"
 module.defaults = {
-	Enabled = true,
+	Enabled = false,
 	Outline = true,
 	ShowText = true,
 	ShowPerc = true,
@@ -23,10 +23,10 @@ module.localized = true
 
 function module:Initialize()
 	-- Setup the frame we need
-	self.f = self:CreateRing(true, ArcHUDFrame)
-	self.f:SetAlpha(0)
+	self.f = self:CreateRing(true, MageHUDFrame)
 
-	self.HPText = self:CreateFontString(self.f, "BACKGROUND", {150, 15}, 14, "RIGHT", {1.0, 1.0, 0.0}, {"TOPRIGHT", ArcHUDFrameCombo, "TOPLEFT", 0, 0})
+
+	self.HPText = self:CreateFontString(self.f, "BACKGROUND", {150, 15}, 14, "RIGHT", {1.0, 1.0, 0.0}, {"TOPRIGHT", MageHUDFrameText, "TOPLEFT", 0, 0})
 	self.HPPerc = self:CreateFontString(self.f, "BACKGROUND", {70, 14}, 12, "RIGHT", {1.0, 1.0, 1.0}, {"TOPRIGHT", self.HPText, "BOTTOMRIGHT", 0, 0})
 	self.DefText = self:CreateFontString(self.f, "BACKGROUND", {70, 14}, 11, "RIGHT", {1.0, 0.2, 0.2}, {"BOTTOMRIGHT", self.HPText, "TOPRIGHT", 0, 0})
 end
