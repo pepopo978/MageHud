@@ -77,7 +77,7 @@ LM:RegisterTranslations("enUS", function()
 
 		["Health"] = "Player Health",
 		["Mana"] = "Player Mana",
-		["ShieldCombined"] = "Combined Ice Barrier + Mana Shield",
+		["ShieldCombined"] = "Combined Shield",
 		["ShieldIceBarrier"] = "Ice Barrier",
 		["ShieldMana"] = "Mana Shield",
 		["Casting"] = true,

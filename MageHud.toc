@@ -35,6 +35,7 @@ Core.xml
 Core.lua
 Utils.lua
 RingTemplate.lua
+ShieldTracker.lua
 ModuleCore.lua
 FuBarPlugin.lua
 

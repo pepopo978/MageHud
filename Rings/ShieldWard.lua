@@ -23,6 +23,9 @@ function module:Initialize()
 	-- Setup the frame we need
 	self.f = self:CreateRing(true, MageHUDFrame)
 
+	self.iceBarrier = 0
+	self.maxIceBarrier = 0
+
 	self.ShieldText = self:CreateFontString(self.f, "BACKGROUND", { 150, 15 }, 14, "RIGHT", { 1.0, 1.0, 0.0 }, { "TOPRIGHT", MageHUDFrameText, "TOPLEFT", 0, 0 })
 	self.ShieldPerc = self:CreateFontString(self.f, "BACKGROUND", { 40, 14 }, 12, "RIGHT", { 1.0, 1.0, 1.0 }, { "TOPRIGHT", self.ShieldText, "BOTTOMRIGHT", 0, 0 })
 	self.Label = self:CreateFontString(self.f, "BACKGROUND", { 150, 15 }, 12, "RIGHT", { 1.0, 1.0, 1.0 }, { "TOPRIGHT", self.ShieldPerc, "BOTTOMRIGHT", 0, 0 })
@@ -65,8 +68,6 @@ function module:Update()
 end
 
 function module:Enable()
-	MageHUD:EnableShieldTracking()
-
 	self.f.pulse = false
 
 	if (UnitIsGhost(self.unit)) then
@@ -80,7 +81,14 @@ function module:Enable()
 	self.Label:SetText("Ice Barrier")
 
 	-- Register the events we will use
-	self:RegisterEvent("MAGEHUD_SHIELD_UPDATE", "UpdateShield")
+	self:RegisterEvent("UNIT_CASTEVENT", "CastEvent")
+
+	self:RegisterEvent("CHAT_MSG_SPELL_AURA_GONE_SELF", "AuraFadeEvent")
+	self:RegisterEvent("CHAT_MSG_COMBAT_CREATURE_VS_SELF_HITS", "MeleeDamageEvent")
+	self:RegisterEvent("CHAT_MSG_COMBAT_HOSTILEPLAYER_HITS", "MeleeDamageEvent")
+	self:RegisterEvent("CHAT_MSG_SPELL_CREATURE_VS_SELF_DAMAGE", "SpellDamageEvent")
+	self:RegisterEvent("CHAT_MSG_SPELL_PERIODIC_SELF_DAMAGE", "SpellDamageEvent")
+
 
 	-- Activate the timers
 	self:StartMetro(self.name .. "Alpha")
@@ -89,17 +97,87 @@ function module:Enable()
 end
 
 function module:UpdateShield()
-	local current = ShieldTracker.current_values["Ice Barrier"]
-
-	if not current or current == 0 then
+	if self.iceBarrier == 0 then
 		self.f:Hide()
 	else
-		local max = ShieldTracker.max_values["Ice Barrier"]
+		local max = self.maxIceBarrier
+		local current = self.iceBarrier
 
 		self.f:SetMax(max)
 		self.f:SetValue(current)
 		self.ShieldText:SetText(current)
 		self.ShieldPerc:SetText(floor((current / max) * 100) .. "%")
 		self.f:Show()
+	end
+end
+
+function module:CastEvent(caster, target, event, spellID, castDuration)
+	if not iceBarrierSpellIdAbsorbAmounts[spellID] then
+		return
+	end
+
+	local _, guid = UnitExists("player")
+	if caster ~= guid then
+		return
+	end
+
+	if iceBarrierSpellIdAbsorbAmounts[spellID] then
+		self.iceBarrier = iceBarrierSpellIdAbsorbAmounts[spellID]
+		self.maxIceBarrier = iceBarrierSpellIdAbsorbAmounts[spellID]
+	end
+
+	self:UpdateShield()
+end
+
+function module:AuraFadeEvent()
+	if string.find(arg1, "Ice Barrier fades from you") then
+		self.iceBarrier = 0
+		self:UpdateShield()
+	end
+end
+
+function module:ParseAbsorbAmount(eventStr)
+	-- example eventStr: "You suffer 0 frost damage from Blizzard. (10 absorbed)"
+	-- example eventStr: "Mob hits you for 0. (10 absorbed)"
+	local _, _, amt = string.find(eventStr, "%((%d+) absorbed%)")
+	if amt then
+		return tonumber(amt)
+	end
+
+	return nil
+end
+
+function module:DeductIceBarrier(amt)
+	if amt > self.iceBarrier then
+		amt = amt - self.iceBarrier
+		self.iceBarrier = 0
+	else
+		self.iceBarrier = self.iceBarrier - amt
+		amt = 0
+	end
+	return amt
+end
+
+function module:MeleeDamageEvent()
+	-- parse absorb amount
+	local amt = self:ParseAbsorbAmount(arg1)
+	if amt then
+		amt = tonumber(amt)
+		if self.iceBarrier > 0 then
+			amt = self:DeductIceBarrier(amt)
+		end
+		self:UpdateShield()
+	end
+end
+
+function module:SpellDamageEvent()
+	-- parse absorb amount
+	local amt = self:ParseAbsorbAmount(arg1)
+	if amt then
+		amt = tonumber(amt)
+		if self.iceBarrier > 0 then
+			self:DeductIceBarrier(amt)
+			self:UpdateShield()
+		end
 	end
 end
