@@ -234,7 +234,7 @@ function ShieldTracker:HasActiveShield(dmgType)
 		return true
 	end
 	-- special case for mana shield
-	if dmgType == "Physical" and ShieldTracker.current_values["Mana Shield"] > 0 then
+	if dmgType == "Physical" and ShieldTracker.current_values["Mana Shield"] or 0 > 0 then
 		return true
 	end
 
