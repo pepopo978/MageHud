@@ -1,4 +1,15 @@
 local spellIdAbsorbAmounts = {
+	[17] = 48, -- Power word shield rank 1
+	[592] = 94, -- Power word shield rank 2
+	[600] = 166, -- Power word shield rank 3
+	[3747] = 244, -- Power word shield rank 4
+	[6065] = 312, -- Power word shield rank 5
+	[6066] = 394, -- Power word shield rank 6
+	[10898] = 499, -- Power word shield rank 7
+	[10899] = 622, -- Power word shield rank 8
+	[10900] = 782, -- Power word shield rank 9
+	[10901] = 942, -- Power word shield rank 10
+
 	[11426] = 454, -- lvl 40 ice barrier
 	[13031] = 568, -- lvl 46 ice barrier
 	[13032] = 699, -- lvl 52 ice barrier
@@ -44,9 +55,35 @@ local spellIdAbsorbAmounts = {
 
 	[7245] = 400, -- Holy Protection
 	[17545] = 2600, -- Greater Holy Protection
+
+	[29506] = 900, -- Burrower's Shell
+}
+
+local targetedShields = {
+	[17] = 44, -- Power word shield rank 1
+	[592] = 88, -- Power word shield rank 2
+	[600] = 158, -- Power word shield rank 3
+	[3747] = 234, -- Power word shield rank 4
+	[6065] = 301, -- Power word shield rank 5
+	[6066] = 381, -- Power word shield rank 6
+	[10898] = 484, -- Power word shield rank 7
+	[10899] = 605, -- Power word shield rank 8
+	[10900] = 763, -- Power word shield rank 9
+	[10901] = 942, -- Power word shield rank 10
 }
 
 local spellIdToBuffName = {
+	[17] = "Power Word: Shield", -- Power word shield rank 1
+	[592] = "Power Word: Shield", -- Power word shield rank 2
+	[600] = "Power Word: Shield", -- Power word shield rank 3
+	[3747] = "Power Word: Shield", -- Power word shield rank 4
+	[6065] = "Power Word: Shield", -- Power word shield rank 5
+	[6066] = "Power Word: Shield", -- Power word shield rank 6
+	[10898] = "Power Word: Shield", -- Power word shield rank 7
+	[10899] = "Power Word: Shield", -- Power word shield rank 8
+	[10900] = "Power Word: Shield", -- Power word shield rank 9
+	[10901] = "Power Word: Shield", -- Power word shield rank 10
+
 	[11426] = "Ice Barrier", -- lvl 40 ice barrier
 	[13031] = "Ice Barrier", -- lvl 46 ice barrier
 	[13032] = "Ice Barrier", -- lvl 52 ice barrier
@@ -91,12 +128,16 @@ local spellIdToBuffName = {
 
 	[7245] = "Holy Protection", -- Holy Protection
 	[17545] = "Holy Protection", -- Greater Holy Protection
+
+	[29506] = "The Burrower\'s Shell", -- Burrower's Shell
 }
 
 local buffNameToShieldTypes = {
 	["Mana Shield"] = { "Physical" }, -- special case as it always has lower priority
 
 	["Ice Barrier"] = { "Physical", "Frost", "Fire", "Arcane", "Shadow", "Nature", "Holy" },
+	["The Burrower\'s Shell"] = { "Physical", "Frost", "Fire", "Arcane", "Shadow", "Nature", "Holy" },
+	["Power Word\: Shield"] = { "Physical", "Frost", "Fire", "Arcane", "Shadow", "Nature", "Holy" },
 
 	["Frost Resistance"] = { "Frost" }, -- frost deflector
 	["Fire Resistance"] = { "Fire" }, -- fire deflector
@@ -115,6 +156,8 @@ local buffNameToShieldTypes = {
 local buffNameToColors = {
 	-- all
 	["Ice Barrier"] = { ["r"] = 1, ["g"] = 1, ["b"] = 1 },
+	["The Burrower\'s Shell"] = { ["r"] = 1, ["g"] = 1, ["b"] = 1 },
+	["Power Word\: Shield"] = { ["r"] = 1, ["g"] = 1, ["b"] = 1 },
 
 	-- physical
 	["Mana Shield"] = { ["r"] = 0, ["g"] = 0, ["b"] = 1 },
@@ -250,6 +293,8 @@ function MageHUD:EnableShieldTracking()
 	MageHUD:RegisterEvent("CHAT_MSG_SPELL_CREATURE_VS_SELF_DAMAGE", "DamageEvent")
 	MageHUD:RegisterEvent("CHAT_MSG_SPELL_PERIODIC_SELF_DAMAGE", "DamageEvent")
 
+	MageHUD:RegisterEvent("PLAYER_DEAD", "DeathEvent")
+
 	self.enable = true
 end
 
@@ -261,7 +306,10 @@ function MageHUD:CastEvent(caster, target, event, spellID, castDuration)
 
 	local _, guid = UnitExists("player")
 	if caster ~= guid then
-		return
+		-- if not a targeted shield cast on player, ignore this cast event
+		if not targetedShields[spellID] or target ~= guid then
+			return
+		end
 	end
 
 	local shieldName = spellIdToBuffName[spellID]
@@ -275,6 +323,11 @@ function MageHUD:CastEvent(caster, target, event, spellID, castDuration)
 	end
 
 	ShieldTracker.last_cast_shield = shieldName
+
+	-- shorten shield name for display
+	if shieldName == "The Burrower\'s Shell" then
+		shieldName = "Burrower Shell"
+	end
 	ShieldTracker.last_cast_string = "+" .. tostring(absorbAmount) .. " from " .. shieldName
 
 	MageHUD:TriggerEvent("MAGEHUD_SHIELD_UPDATE")
@@ -386,3 +439,24 @@ function MageHUD:DamageEvent()
 		MageHUD:TriggerEvent("MAGEHUD_SHIELD_UPDATE")
 	end
 end
+
+function MageHUD:DeathEvent()
+	-- reset all values
+	ShieldTracker.last_cast_shield = nil;
+	ShieldTracker.last_cast_string = nil;
+	ShieldTracker.last_absorbed_shield = nil;
+	ShieldTracker.last_absorbed_string = nil;
+	ShieldTracker.current_values = {};
+	ShieldTracker.max_values = {};
+	ShieldTracker.active_shields = {
+		Physical = {}, -- shields that block physical damage
+		Fire = {}, -- shields that block fire damage
+		Frost = {}, -- shields that block frost damage
+		Arcane = {}, -- shields that block arcane damage
+		Shadow = {}, -- shields that block shadow damage
+		Nature = {}, -- shields that block nature damage
+		Holy = {}, -- shields that block holy damage
+	}
+	MageHUD:TriggerEvent("MAGEHUD_SHIELD_UPDATE")
+end
+

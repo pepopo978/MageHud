@@ -242,9 +242,11 @@ end
 function MageHUD.modulePrototype:MAGEHUD_MODULE_ENABLE()
 	self.parent:ToggleModuleActive(self, true)
 end
+
 function MageHUD.modulePrototype:MAGEHUD_MODULE_DISABLE()
 	self.parent:ToggleModuleActive(self, false)
 end
+
 function MageHUD.modulePrototype:MAGEHUD_MODULE_UPDATE(module)
 	if(module == self.name) then
 		if(self.db.profile.Enabled and not self.parent:IsModuleActive(self)) then
