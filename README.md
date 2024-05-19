@@ -62,8 +62,13 @@ The combined shield will handle all of the following spells:
 
 [29506] = "The Burrower\'s Shell", -- Burrower's Shell
 ```
+![image](https://github.com/pepopo978/MageHud/assets/149287158/26e8a3a4-3c69-4c33-835c-f460e1019430)
+
+Combined shield
 
 ![image](https://github.com/pepopo978/MageHud/assets/149287158/06d336c8-6fc7-4398-a7dc-c47c4ee5b665)
+
+Separate shields
 
 ### About this repository
 
