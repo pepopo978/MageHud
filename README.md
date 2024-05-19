@@ -4,6 +4,17 @@ MageHUD is a fork of ArcHud with some of the same original arcs and additional a
 
 The combined shield will handle all of the following spells:
 ```
+[17] = "Power Word: Shield", -- Power word shield rank 1
+[592] = "Power Word: Shield", -- Power word shield rank 2
+[600] = "Power Word: Shield", -- Power word shield rank 3
+[3747] = "Power Word: Shield", -- Power word shield rank 4
+[6065] = "Power Word: Shield", -- Power word shield rank 5
+[6066] = "Power Word: Shield", -- Power word shield rank 6
+[10898] = "Power Word: Shield", -- Power word shield rank 7
+[10899] = "Power Word: Shield", -- Power word shield rank 8
+[10900] = "Power Word: Shield", -- Power word shield rank 9
+[10901] = "Power Word: Shield", -- Power word shield rank 10
+	
 [11426] = "Ice Barrier", -- lvl 40 ice barrier
 [13031] = "Ice Barrier", -- lvl 46 ice barrier
 [13032] = "Ice Barrier", -- lvl 52 ice barrier
@@ -48,6 +59,8 @@ The combined shield will handle all of the following spells:
 
 [7245] = "Holy Protection", -- Holy Protection
 [17545] = "Holy Protection", -- Greater Holy Protection
+
+[29506] = "The Burrower\'s Shell", -- Burrower's Shell
 ```
 
 ![image](https://github.com/pepopo978/MageHud/assets/149287158/06d336c8-6fc7-4398-a7dc-c47c4ee5b665)
