@@ -289,9 +289,10 @@ function MageHUD:EnableShieldTracking()
 	MageHUD:RegisterEvent("UNIT_CASTEVENT", "CastEvent")
 	MageHUD:RegisterEvent("CHAT_MSG_SPELL_AURA_GONE_SELF", "AuraFadeEvent")
 	MageHUD:RegisterEvent("CHAT_MSG_COMBAT_CREATURE_VS_SELF_HITS", "DamageEvent")
-	MageHUD:RegisterEvent("CHAT_MSG_COMBAT_HOSTILEPLAYER_HITS", "DamageEvent")
-	MageHUD:RegisterEvent("CHAT_MSG_SPELL_CREATURE_VS_SELF_DAMAGE", "DamageEvent")
 	MageHUD:RegisterEvent("CHAT_MSG_SPELL_PERIODIC_SELF_DAMAGE", "DamageEvent")
+	MageHUD:RegisterEvent("CHAT_MSG_SPELL_CREATURE_VS_SELF_DAMAGE", "DamageEvent")
+
+	MageHUD:RegisterEvent("CHAT_MSG_SPELL_SELF_DAMAGE", "SelfDamageEvent") -- self is only the target for spells that hurt yourself
 
 	MageHUD:RegisterEvent("PLAYER_DEAD", "DeathEvent")
 
@@ -414,6 +415,15 @@ function MageHUD:DeductShield(dmgType, amt)
 		end
 	end
 	return newAmt
+end
+
+function MageHUD:SelfDamageEvent()
+	-- check that self was the target (hits you for or crits you for)
+	if not string.find(arg1, "its you for") then
+		return
+	end
+
+	return MageHUD:DamageEvent(arg1)
 end
 
 function MageHUD:DamageEvent()
