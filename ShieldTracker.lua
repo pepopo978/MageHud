@@ -313,7 +313,7 @@ function MageHUD:CastEvent(caster, target, event, spellID, castDuration)
 		end
 	else
 		-- if cast on another target, ignore this cast event
-		if target ~= guid then
+		if targetedShields[spellID] and target ~= guid then
 			return
 		end
 	end
