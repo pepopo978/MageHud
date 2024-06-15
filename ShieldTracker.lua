@@ -311,6 +311,11 @@ function MageHUD:CastEvent(caster, target, event, spellID, castDuration)
 		if not targetedShields[spellID] or target ~= guid then
 			return
 		end
+	else
+		-- if cast on another target, ignore this cast event
+		if target ~= guid then
+			return
+		end
 	end
 
 	local shieldName = spellIdToBuffName[spellID]
