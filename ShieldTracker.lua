@@ -84,6 +84,15 @@ local targetedShields = {
 	[10901] = 942, -- Power word shield rank 10
 }
 
+local petSacrifice = {
+	[7812] = 319, -- Voidwalker sacrifice
+	[19438] = 529, -- Voidwalker sacrifice
+	[19440] = 794, -- Voidwalker sacrifice
+	[19441] = 1124, -- Voidwalker sacrifice
+	[19442] = 1503, -- Voidwalker sacrifice
+	[19443] = 1931, -- Voidwalker sacrifice
+}
+
 local spellIdToBuffName = {
 	[17] = "Power Word: Shield", -- Power word shield rank 1
 	[592] = "Power Word: Shield", -- Power word shield rank 2
@@ -333,15 +342,29 @@ function MageHUD:CastEvent(caster, target, event, spellID, castDuration)
 		return
 	end
 
-	local _, guid = UnitExists("player")
-	if caster ~= guid then
-		-- if not a targeted shield cast on player, ignore this cast event
-		if not targetedShields[spellID] or target ~= guid then
+	local _, playerGuid = UnitExists("player")
+
+	if caster ~= playerGuid then
+		-- someone else casted the spell, check for special cases
+		if petSacrifice[spellID] then
+			local _, petGuid = UnitExists("pet")
+			-- if a pet sacrifice from someone else's pet, ignore this cast event
+			if caster ~= petGuid then
+				return
+			end
+		elseif targetedShields[spellID] then
+			if target ~= playerGuid then
+				-- if not cast on player, ignore this cast event
+				return
+			end
+		else
+			-- spell we don't care about
 			return
 		end
 	else
-		-- if cast on another target, ignore this cast event
-		if targetedShields[spellID] and target ~= guid then
+		-- we are the caster
+		-- if we are casting on another target, ignore this cast event
+		if targetedShields[spellID] and target ~= playerGuid then
 			return
 		end
 	end
