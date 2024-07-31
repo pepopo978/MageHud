@@ -57,6 +57,18 @@ local spellIdAbsorbAmounts = {
 	[17545] = 2600, -- Greater Holy Protection
 
 	[29506] = 900, -- Burrower's Shell
+
+	[6229] = 290, -- Shadow Ward
+	[11739] = 470, -- Shadow Ward
+	[11740] = 675, -- Shadow Ward
+	[28610] = 920, -- Shadow Ward
+
+	[7812] = 319, -- Voidwalker sacrifice
+	[19438] = 529, -- Voidwalker sacrifice
+	[19440] = 794, -- Voidwalker sacrifice
+	[19441] = 1124, -- Voidwalker sacrifice
+	[19442] = 1503, -- Voidwalker sacrifice
+	[19443] = 1931, -- Voidwalker sacrifice
 }
 
 local targetedShields = {
@@ -130,6 +142,18 @@ local spellIdToBuffName = {
 	[17545] = "Holy Protection", -- Greater Holy Protection
 
 	[29506] = "The Burrower\'s Shell", -- Burrower's Shell
+
+	[6229] = "Shadow Ward", -- lvl 32
+	[11739] = "Shadow Ward", -- lvl 42
+	[11740] = "Shadow Ward", -- lvl 52
+	[28610] = "Shadow Ward", -- lvl 60
+
+	[7812] = "Sacrifice", -- Voidwalker sacrifice lvl 16
+	[19438] = "Sacrifice", -- Voidwalker sacrifice lvl 24
+	[19440] = "Sacrifice", -- Voidwalker sacrifice lvl 32
+	[19441] = "Sacrifice", -- Voidwalker sacrifice lvl 40
+	[19442] = "Sacrifice", -- Voidwalker sacrifice lvl 48
+	[19443] = "Sacrifice", -- Voidwalker sacrifice lvl 60
 }
 
 local buffNameToShieldTypes = {
@@ -138,12 +162,14 @@ local buffNameToShieldTypes = {
 	["Ice Barrier"] = { "Physical", "Frost", "Fire", "Arcane", "Shadow", "Nature", "Holy" },
 	["The Burrower\'s Shell"] = { "Physical", "Frost", "Fire", "Arcane", "Shadow", "Nature", "Holy" },
 	["Power Word\: Shield"] = { "Physical", "Frost", "Fire", "Arcane", "Shadow", "Nature", "Holy" },
+	["Sacrifice"] = { "Physical", "Frost", "Fire", "Arcane", "Shadow", "Nature", "Holy" },
 
 	["Frost Resistance"] = { "Frost" }, -- frost deflector
 	["Fire Resistance"] = { "Fire" }, -- fire deflector
 
 	["Frost Ward"] = { "Frost" },
 	["Fire Ward"] = { "Fire" },
+	["Shadow Ward"] = { "Shadow" },
 
 	["Frost Protection"] = { "Frost" },
 	["Fire Protection"] = { "Fire" },
@@ -158,6 +184,7 @@ local buffNameToColors = {
 	["Ice Barrier"] = { ["r"] = 1, ["g"] = 1, ["b"] = 1 },
 	["The Burrower\'s Shell"] = { ["r"] = 1, ["g"] = 1, ["b"] = 1 },
 	["Power Word\: Shield"] = { ["r"] = 1, ["g"] = 1, ["b"] = 1 },
+	["Sacrifice"] = { ["r"] = 1, ["g"] = 1, ["b"] = 1 },
 
 	-- physical
 	["Mana Shield"] = { ["r"] = 0, ["g"] = 0, ["b"] = 1 },
@@ -177,6 +204,7 @@ local buffNameToColors = {
 
 	-- shadow
 	["Shadow Protection"] = { ["r"] = 0.7, ["g"] = 0, ["b"] = 1 },
+	["Shadow Ward"] = { ["r"] = 0.6, ["g"] = 0, ["b"] = 1 },
 
 	-- arcane
 	["Arcane Protection"] = { ["r"] = 1, ["g"] = 1, ["b"] = 0 },
