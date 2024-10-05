@@ -24,7 +24,7 @@ function module:Initialize()
 	-- Setup the frame we need
 	self.f = self:CreateRing(true, MageHUDFrame)
 
-	self.ShieldText = self:CreateFontString(self.f, "BACKGROUND", { 150, 15 }, 14, "RIGHT", { 1.0, 1.0, 0.0 }, { "TOPRIGHT", MageHUDFrameText, "TOPLEFT", 0, -30 })
+	self.ShieldText = self:CreateFontString(self.f, "BACKGROUND", { 150, 15 }, 14, "RIGHT", { 1.0, 1.0, 0.0 }, { "TOPRIGHT", MageHUDFrameText, "TOPLEFT", 0, -35 })
 	self.ShieldPerc = self:CreateFontString(self.f, "BACKGROUND", { 40, 14 }, 12, "RIGHT", { 1.0, 1.0, 1.0 }, { "TOPRIGHT", self.ShieldText, "BOTTOMRIGHT", 0, 0 })
 	self.Label = self:CreateFontString(self.f, "BACKGROUND", { 150, 15 }, 12, "RIGHT", { 1.0, 1.0, 1.0 }, { "TOPRIGHT", self.ShieldPerc, "BOTTOMRIGHT", 0, 0 })
 end
