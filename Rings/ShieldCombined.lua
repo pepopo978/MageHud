@@ -1,4 +1,5 @@
 local module = MageHUD:NewModule("ShieldCombined")
+local LST = AceLibrary("AceLocale-2.0"):new("MageHUD_ShieldTracker")
 local _, _, rev = string.find("$Rev: 11018 $", "([0-9]+)")
 module.version = "2.0." .. rev
 module.unit = "player"
@@ -23,9 +24,9 @@ function module:Initialize()
 	-- Setup the frame we need
 	self.f = self:CreateRing(true, MageHUDFrame)
 
-	self.ShieldText = self:CreateFontString(self.f, "BACKGROUND", { 150, 15 }, 14, "LEFT", { 1.0, 1.0, 0.0 }, { "TOPLEFT", MageHUDFrameText, "TOPLEFT", 0, 0 })
+	self.ShieldText = self:CreateFontString(self.f, "BACKGROUND", { 150, 15 }, 14, "LEFT", { 1.0, 1.0, 0.0 }, { "TOPLEFT", MageHUDFrameText, "TOPLEFT", 8, -30 })
 	self.ShieldPerc = self:CreateFontString(self.f, "BACKGROUND", { 40, 14 }, 12, "LEFT", { 1.0, 1.0, 1.0 }, { "TOPLEFT", self.ShieldText, "BOTTOMLEFT", 0, 0 })
-	self.Label = self:CreateFontString(self.f, "BACKGROUND", { 200, 15 }, 12, "LEFT", { 1.0, 1.0, 1.0 }, { "TOPLEFT", self.ShieldPerc, "BOTTOMLEFT", -50, 0 })
+	self.Label = self:CreateFontString(self.f, "BACKGROUND", { 200, 15 }, 12, "LEFT", { 1.0, 1.0, 1.0 }, { "TOPLEFT", self.ShieldPerc, "BOTTOMLEFT", -40, 0 })
 end
 
 function module:Update()
@@ -97,9 +98,9 @@ function module:UpdateShield()
 	if current == 0 then
 		self.f:Hide()
 	else
-		if ShieldTracker:GetCurrentValue("Ice Barrier") > 0 then
+		if ShieldTracker:GetCurrentValue(LST["Ice Barrier"]) > 0 then
 			self.f:UpdateColor({ ["r"] = 1, ["g"] = 1, ["b"] = 1 })
-		elseif ShieldTracker:GetCurrentValue("Mana Shield") > 0 then
+		elseif ShieldTracker:GetCurrentValue(LST["Mana Shield"]) > 0 then
 			self.f:UpdateColor({ ["r"] = 0, ["g"] = 0, ["b"] = 1 })
 		end
 

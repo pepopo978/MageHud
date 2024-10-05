@@ -1,4 +1,5 @@
 local module = MageHUD:NewModule("Casting")
+local LST = AceLibrary("AceLocale-2.0"):new("MageHUD_ShieldTracker")
 local _, _, rev = string.find("$Rev: 11018 $", "([0-9]+)")
 module.version = "2.0." .. rev
 module.unit = "player"
@@ -293,17 +294,17 @@ function module:SpellcastStop()
 			else
 				self.f:UpdateColor({["r"] = 1.0, ["g"] = 0, ["b"] = 0})
 				if(event == "SPELLCAST_FAILED") then
-					self.Text:SetText("Failed")
+					self.Text:SetText(LST["Failed"])
 				else
-					self.Text:SetText("Interrupted")
+					self.Text:SetText(LST["Interrupted"])
 				end
 			end
 		elseif(self.f.casting == 0 and (event == "SPELLCAST_FAILED" or event == "SPELLCAST_INTERRUPTED")) then
 			self.f:UpdateColor({["r"] = 1.0, ["g"] = 0, ["b"] = 0})
 			if(event == "SPELLCAST_FAILED") then
-				self.Text:SetText("Failed")
+				self.Text:SetText(LST["Failed"])
 			else
-				self.Text:SetText("Interrupted")
+				self.Text:SetText(LST["Interrupted"])
 			end
 		end
 		self.waschanneling = false

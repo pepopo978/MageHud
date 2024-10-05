@@ -1,4 +1,5 @@
 local module = MageHUD:NewModule("ShieldMana")
+local LST = AceLibrary("AceLocale-2.0"):new("MageHUD_ShieldTracker")
 local _, _, rev = string.find("$Rev: 11018 $", "([0-9]+)")
 module.version = "2.0." .. rev
 module.unit = "player"
@@ -25,7 +26,7 @@ function module:Initialize()
 
 	self.f:UpdateColor({ ["r"] = 0, ["g"] = 0, ["b"] = 1 })
 
-	self.ShieldText = self:CreateFontString(self.f, "BACKGROUND", { 150, 15 }, 14, "LEFT", { 1.0, 1.0, 0.0 }, { "TOPLEFT", MageHUDFrameText, "TOPRIGHT", 0, 0 })
+	self.ShieldText = self:CreateFontString(self.f, "BACKGROUND", { 150, 15 }, 14, "LEFT", { 1.0, 1.0, 0.0 }, { "TOPLEFT", MageHUDFrameText, "TOPRIGHT", 0, -30 })
 	self.ShieldPerc = self:CreateFontString(self.f, "BACKGROUND", { 40, 14 }, 12, "LEFT", { 1.0, 1.0, 1.0 }, { "TOPLEFT", self.ShieldText, "BOTTOMLEFT", 0, 0 })
 	self.Label = self:CreateFontString(self.f, "BACKGROUND", { 150, 15 }, 12, "LEFT", { 1.0, 1.0, 1.0 }, { "TOPLEFT", self.ShieldPerc, "BOTTOMLEFT", 0, 0 })
 end
@@ -85,7 +86,7 @@ function module:Enable()
 		self.f:Hide()
 	end
 
-	self.Label:SetText("Mana Shield")
+	self.Label:SetText(LST["Mana Shield"])
 
 	-- Register the events we will use
 	self:RegisterEvent("MAGEHUD_SHIELD_UPDATE", "UpdateShield")
@@ -97,12 +98,12 @@ function module:Enable()
 end
 
 function module:UpdateShield()
-	local current = ShieldTracker.current_values["Mana Shield"]
+	local current = ShieldTracker.current_values[LST["Mana Shield"]]
 
 	if not current or current == 0 then
 		self.f:Hide()
 	else
-		local max = ShieldTracker.max_values["Mana Shield"]
+		local max = ShieldTracker.max_values[LST["Mana Shield"]]
 
 		self.f:SetMax(max)
 		self.f:SetValue(current)

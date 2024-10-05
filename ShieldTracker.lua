@@ -1,3 +1,4 @@
+local LST = AceLibrary("AceLocale-2.0"):new("MageHUD_ShieldTracker")
 local spellIdAbsorbAmounts = {
 	[17] = 48, -- Power word shield rank 1
 	[592] = 94, -- Power word shield rank 2
@@ -94,132 +95,133 @@ local petSacrifice = {
 }
 
 local spellIdToBuffName = {
-	[17] = "Power Word: Shield", -- Power word shield rank 1
-	[592] = "Power Word: Shield", -- Power word shield rank 2
-	[600] = "Power Word: Shield", -- Power word shield rank 3
-	[3747] = "Power Word: Shield", -- Power word shield rank 4
-	[6065] = "Power Word: Shield", -- Power word shield rank 5
-	[6066] = "Power Word: Shield", -- Power word shield rank 6
-	[10898] = "Power Word: Shield", -- Power word shield rank 7
-	[10899] = "Power Word: Shield", -- Power word shield rank 8
-	[10900] = "Power Word: Shield", -- Power word shield rank 9
-	[10901] = "Power Word: Shield", -- Power word shield rank 10
+	[17] = LST["Power Word: Shield"], -- Power word shield rank 1
+	[592] = LST["Power Word: Shield"], -- Power word shield rank 2
+	[600] = LST["Power Word: Shield"], -- Power word shield rank 3
+	[3747] = LST["Power Word: Shield"], -- Power word shield rank 4
+	[6065] = LST["Power Word: Shield"], -- Power word shield rank 5
+	[6066] = LST["Power Word: Shield"], -- Power word shield rank 6
+	[10898] = LST["Power Word: Shield"], -- Power word shield rank 7
+	[10899] = LST["Power Word: Shield"], -- Power word shield rank 8
+	[10900] = LST["Power Word: Shield"], -- Power word shield rank 9
+	[10901] = LST["Power Word: Shield"], -- Power word shield rank 10
 
-	[11426] = "Ice Barrier", -- lvl 40 ice barrier
-	[13031] = "Ice Barrier", -- lvl 46 ice barrier
-	[13032] = "Ice Barrier", -- lvl 52 ice barrier
-	[13033] = "Ice Barrier", -- lvl 58 ice barrier
+	[11426] = LST["Ice Barrier"], -- lvl 40 ice barrier
+	[13031] = LST["Ice Barrier"], -- lvl 46 ice barrier
+	[13032] = LST["Ice Barrier"], -- lvl 52 ice barrier
+	[13033] = LST["Ice Barrier"], -- lvl 58 ice barrier
 
-	[1463] = "Mana Shield", -- lvl 20 mana shield
-	[8494] = "Mana Shield", -- lvl 28 mana shield
-	[8495] = "Mana Shield", -- lvl 36 mana shield
-	[10191] = "Mana Shield", -- lvl 44 mana shield
-	[10192] = "Mana Shield", -- lvl 52 mana shield
-	[10193] = "Mana Shield", -- lvl 60 mana shield
+	[1463] = LST["Mana Shield"], -- lvl 20 mana shield
+	[8494] = LST["Mana Shield"], -- lvl 28 mana shield
+	[8495] = LST["Mana Shield"], -- lvl 36 mana shield
+	[10191] = LST["Mana Shield"], -- lvl 44 mana shield
+	[10192] = LST["Mana Shield"], -- lvl 52 mana shield
+	[10193] = LST["Mana Shield"], -- lvl 60 mana shield
 
-	[4077] = "Frost Resistance", -- ice deflector
+	[4077] = LST["Frost Resistance"], -- ice deflector
 
-	[6143] = "Frost Ward", -- lvl 24 frost Ward
-	[8461] = "Frost Ward", -- lvl 34 frost Ward
-	[8462] = "Frost Ward", -- lvl 44 frost Ward
-	[10177] = "Frost Ward", -- lvl 54 frost Ward
-	[28609] = "Frost Ward", -- lvl 60 frost Ward
+	[6143] = LST["Frost Ward"], -- lvl 24 frost Ward
+	[8461] = LST["Frost Ward"], -- lvl 34 frost Ward
+	[8462] = LST["Frost Ward"], -- lvl 44 frost Ward
+	[10177] = LST["Frost Ward"], -- lvl 54 frost Ward
+	[28609] = LST["Frost Ward"], -- lvl 60 frost Ward
 
-	[4057] = "Fire Resistance", -- fire deflector
+	[4057] = LST["Fire Resistance"], -- fire deflector
 
-	[543] = "Fire Ward", -- lvl 24 fire Ward
-	[8457] = "Fire Ward", -- lvl 34 fire Ward
-	[8458] = "Fire Ward", -- lvl 44 fire Ward
-	[10223] = "Fire Ward", -- lvl 54 fire Ward
-	[10225] = "Fire Ward", -- lvl 60 fire Ward
+	[543] = LST["Fire Ward"], -- lvl 24 fire Ward
+	[8457] = LST["Fire Ward"], -- lvl 34 fire Ward
+	[8458] = LST["Fire Ward"], -- lvl 44 fire Ward
+	[10223] = LST["Fire Ward"], -- lvl 54 fire Ward
+	[10225] = LST["Fire Ward"], -- lvl 60 fire Ward
 
-	[7239] = "Frost Protection", -- Frost Protection
-	[17544] = "Frost Protection", -- Greater Frost Protection
+	[7239] = LST["Frost Protection"], -- Frost Protection
+	[17544] = LST["Frost Protection"], -- Greater Frost Protection
 
-	[7233] = "Fire Protection", -- Fire Protection
-	[17543] = "Fire Protection", -- Greater Fire Protection
+	[7233] = LST["Fire Protection"], -- Fire Protection
+	[17543] = LST["Fire Protection"], -- Greater Fire Protection
 
-	[7254] = "Nature Protection", -- Nature Protection
-	[17546] = "Nature Protection", -- Greater Nature Protection
+	[7254] = LST["Nature Protection"], -- Nature Protection
+	[17546] = LST["Nature Protection"], -- Greater Nature Protection
 
-	[7242] = "Shadow Protection", -- Shadow Protection
-	[17548] = "Shadow Protection", -- Greater Shadow Protection
+	[7242] = LST["Shadow Protection"], -- Shadow Protection
+	[17548] = LST["Shadow Protection"], -- Greater Shadow Protection
 
-	[17549] = "Arcane Protection", -- Greater Arcane Protection
+	[17549] = LST["Arcane Protection"], -- Greater Arcane Protection
 
-	[7245] = "Holy Protection", -- Holy Protection
-	[17545] = "Holy Protection", -- Greater Holy Protection
+	[7245] = LST["Holy Protection"], -- Holy Protection
+	[17545] = LST["Holy Protection"], -- Greater Holy Protection
 
-	[29506] = "The Burrower\'s Shell", -- Burrower's Shell
+	[29506] = LST["The Burrower\'s Shell"], -- Burrower's Shell
 
-	[6229] = "Shadow Ward", -- lvl 32
-	[11739] = "Shadow Ward", -- lvl 42
-	[11740] = "Shadow Ward", -- lvl 52
-	[28610] = "Shadow Ward", -- lvl 60
+	[6229] = LST["Shadow Ward"], -- lvl 32
+	[11739] = LST["Shadow Ward"], -- lvl 42
+	[11740] = LST["Shadow Ward"], -- lvl 52
+	[28610] = LST["Shadow Ward"], -- lvl 60
 
-	[7812] = "Sacrifice", -- Voidwalker sacrifice lvl 16
-	[19438] = "Sacrifice", -- Voidwalker sacrifice lvl 24
-	[19440] = "Sacrifice", -- Voidwalker sacrifice lvl 32
-	[19441] = "Sacrifice", -- Voidwalker sacrifice lvl 40
-	[19442] = "Sacrifice", -- Voidwalker sacrifice lvl 48
-	[19443] = "Sacrifice", -- Voidwalker sacrifice lvl 60
+	[7812] = LST["Sacrifice"], -- Voidwalker sacrifice lvl 16
+	[19438] = LST["Sacrifice"], -- Voidwalker sacrifice lvl 24
+	[19440] = LST["Sacrifice"], -- Voidwalker sacrifice lvl 32
+	[19441] = LST["Sacrifice"], -- Voidwalker sacrifice lvl 40
+	[19442] = LST["Sacrifice"], -- Voidwalker sacrifice lvl 48
+	[19443] = LST["Sacrifice"], -- Voidwalker sacrifice lvl 60
 }
 
 local buffNameToShieldTypes = {
-	["Mana Shield"] = { "Physical" }, -- special case as it always has lower priority
+	[LST["Mana Shield"]] = { LST["Physical"] }, -- special case as it always has lower priority
 
-	["Ice Barrier"] = { "Physical", "Frost", "Fire", "Arcane", "Shadow", "Nature", "Holy" },
-	["The Burrower\'s Shell"] = { "Physical", "Frost", "Fire", "Arcane", "Shadow", "Nature", "Holy" },
-	["Power Word\: Shield"] = { "Physical", "Frost", "Fire", "Arcane", "Shadow", "Nature", "Holy" },
-	["Sacrifice"] = { "Physical", "Frost", "Fire", "Arcane", "Shadow", "Nature", "Holy" },
+	[LST["Ice Barrier"]] = { LST["Physical"], LST["Frost"], LST["Fire"], LST["Arcane"], LST["Shadow"], LST["Nature"], LST["Holy"] },
+	[LST["The Burrower\'s Shell"]] = { LST["Physical"], LST["Frost"], LST["Fire"], LST["Arcane"], LST["Shadow"], LST["Nature"], LST["Holy"] },
+    [LST["Power Word: Shield"]] = { LST["Physical"], LST["Frost"], LST["Fire"], LST["Arcane"], LST["Shadow"], LST["Nature"], LST["Holy"] },
+	[LST["Power Word\: Shield"]] = { LST["Physical"], LST["Frost"], LST["Fire"], LST["Arcane"], LST["Shadow"], LST["Nature"], LST["Holy"] },
+	[LST["Sacrifice"]] = { LST["Physical"], LST["Frost"], LST["Fire"], LST["Arcane"], LST["Shadow"], LST["Nature"], LST["Holy"] },
 
-	["Frost Resistance"] = { "Frost" }, -- frost deflector
-	["Fire Resistance"] = { "Fire" }, -- fire deflector
+	[LST["Frost Resistance"]] = { LST["Frost"] }, -- frost deflector
+	[LST["Fire Resistance"]] = { LST["Fire"] }, -- fire deflector
 
-	["Frost Ward"] = { "Frost" },
-	["Fire Ward"] = { "Fire" },
-	["Shadow Ward"] = { "Shadow" },
+	[LST["Frost Ward"]] = { LST["Frost"] },
+	[LST["Fire Ward"]] = { LST["Fire"] },
+	[LST["Shadow Ward"]] = { LST["Shadow"] },
 
-	["Frost Protection"] = { "Frost" },
-	["Fire Protection"] = { "Fire" },
-	["Nature Protection"] = { "Nature" },
-	["Shadow Protection"] = { "Shadow" },
-	["Arcane Protection"] = { "Arcane" },
-	["Holy Protection"] = { "Holy" },
+	[LST["Frost Protection"]] = { LST["Frost"] },
+	[LST["Fire Protection"]] = { LST["Fire"] },
+	[LST["Nature Protection"]] = { LST["Nature"] },
+	[LST["Shadow Protection"]] = { LST["Shadow"] },
+	[LST["Arcane Protection"]] = { LST["Arcane"] },
+	[LST["Holy Protection"]] = { LST["Holy"] },
 }
 
 local buffNameToColors = {
 	-- all
-	["Ice Barrier"] = { ["r"] = 1, ["g"] = 1, ["b"] = 1 },
-	["The Burrower\'s Shell"] = { ["r"] = 1, ["g"] = 1, ["b"] = 1 },
-	["Power Word\: Shield"] = { ["r"] = 1, ["g"] = 1, ["b"] = 1 },
-	["Sacrifice"] = { ["r"] = 1, ["g"] = 1, ["b"] = 1 },
+	[LST["Ice Barrier"]] = { ["r"] = 1, ["g"] = 1, ["b"] = 1 },
+	[LST["The Burrower\'s Shell"]] = { ["r"] = 1, ["g"] = 1, ["b"] = 1 },
+	[LST["Power Word\: Shield"]] = { ["r"] = 1, ["g"] = 1, ["b"] = 1 },
+	[LST["Sacrifice"]] = { ["r"] = 1, ["g"] = 1, ["b"] = 1 },
 
 	-- physical
-	["Mana Shield"] = { ["r"] = 0, ["g"] = 0, ["b"] = 1 },
+	[LST["Mana Shield"]] = { ["r"] = 0, ["g"] = 0, ["b"] = 1 },
 
 	-- frost
-	["Frost Resistance"] = { ["r"] = 0, ["g"] = 0.9, ["b"] = 1 },
-	["Frost Ward"] = { ["r"] = 0, ["g"] = 0.8, ["b"] = 1 },
-	["Frost Protection"] = { ["r"] = 0, ["g"] = 0.7, ["b"] = 1 },
+	[LST["Frost Resistance"]] = { ["r"] = 0, ["g"] = 0.9, ["b"] = 1 },
+	[LST["Frost Ward"]] = { ["r"] = 0, ["g"] = 0.8, ["b"] = 1 },
+	[LST["Frost Protection"]] = { ["r"] = 0, ["g"] = 0.7, ["b"] = 1 },
 
 	-- fire
-	["Fire Resistance"] = { ["r"] = 1, ["g"] = 0.6, ["b"] = 0 },
-	["Fire Ward"] = { ["r"] = 1, ["g"] = 0.4, ["b"] = 0 },
-	["Fire Protection"] = { ["r"] = 1, ["g"] = 0.2, ["b"] = 0 },
+	[LST["Fire Resistance"]] = { ["r"] = 1, ["g"] = 0.6, ["b"] = 0 },
+	[LST["Fire Ward"]] = { ["r"] = 1, ["g"] = 0.4, ["b"] = 0 },
+	[LST["Fire Protection"]] = { ["r"] = 1, ["g"] = 0.2, ["b"] = 0 },
 
 	-- nature
-	["Nature Protection"] = { ["r"] = 0, ["g"] = 1, ["b"] = 0 },
+	[LST["Nature Protection"]] = { ["r"] = 0, ["g"] = 1, ["b"] = 0 },
 
 	-- shadow
-	["Shadow Protection"] = { ["r"] = 0.7, ["g"] = 0, ["b"] = 1 },
-	["Shadow Ward"] = { ["r"] = 0.6, ["g"] = 0, ["b"] = 1 },
+	[LST["Shadow Protection"]] = { ["r"] = 0.7, ["g"] = 0, ["b"] = 1 },
+	[LST["Shadow Ward"]] = { ["r"] = 0.6, ["g"] = 0, ["b"] = 1 },
 
 	-- arcane
-	["Arcane Protection"] = { ["r"] = 1, ["g"] = 1, ["b"] = 0 },
+	[LST["Arcane Protection"]] = { ["r"] = 1, ["g"] = 1, ["b"] = 0 },
 
 	-- holy
-	["Holy Protection"] = { ["r"] = 1, ["g"] = 0, ["b"] = 1 },
+	[LST["Holy Protection"]] = { ["r"] = 1, ["g"] = 0, ["b"] = 1 },
 }
 
 ShieldTracker = {
@@ -230,13 +232,13 @@ ShieldTracker = {
 	current_values = {},
 	max_values = {},
 	active_shields = {
-		Physical = {}, -- shields that block physical damage
-		Fire = {}, -- shields that block fire damage
-		Frost = {}, -- shields that block frost damage
-		Arcane = {}, -- shields that block arcane damage
-		Shadow = {}, -- shields that block shadow damage
-		Nature = {}, -- shields that block nature damage
-		Holy = {}, -- shields that block holy damage
+		[LST["Physical"]] = {}, -- shields that block physical damage
+		[LST["Fire"]] = {}, -- shields that block fire damage
+		[LST["Frost"]] = {}, -- shields that block frost damage
+		[LST["Arcane"]] = {}, -- shields that block arcane damage
+		[LST["Shadow"]] = {}, -- shields that block shadow damage
+		[LST["Nature"]] = {}, -- shields that block nature damage
+		[LST["Holy"]] = {}, -- shields that block holy damage
 	},
 }
 
@@ -271,7 +273,7 @@ function ShieldTracker:HasActiveShield(dmgType)
 		return true
 	end
 	-- special case for mana shield
-	if dmgType == "Physical" and ShieldTracker.current_values["Mana Shield"] or 0 > 0 then
+	if dmgType == LST["Physical"] and ShieldTracker.current_values[LST["Mana Shield"]] or 0 > 0 then
 		return true
 	end
 
@@ -283,8 +285,8 @@ function ShieldTracker:GetActiveShield(dmgType)
 		return ShieldTracker.active_shields[dmgType][1]
 	end
 	-- special case for mana shield
-	if dmgType == "Physical" and ShieldTracker.current_values["Mana Shield"] > 0 then
-		return "Mana Shield"
+	if dmgType == LST["Physical"] and ShieldTracker.current_values[LST["Mana Shield"]] > 0 then
+		return LST["Mana Shield"]
 	end
 	return nil
 end
@@ -328,6 +330,9 @@ function MageHUD:EnableShieldTracking()
 	MageHUD:RegisterEvent("CHAT_MSG_COMBAT_CREATURE_VS_SELF_HITS", "DamageEvent")
 	MageHUD:RegisterEvent("CHAT_MSG_SPELL_PERIODIC_SELF_DAMAGE", "DamageEvent")
 	MageHUD:RegisterEvent("CHAT_MSG_SPELL_CREATURE_VS_SELF_DAMAGE", "DamageEvent")
+
+    MageHUD:RegisterEvent("CHAT_MSG_SPELL_HOSTILEPLAYER_DAMAGE", "SelfDamageEvent")
+    MageHUD:RegisterEvent("CHAT_MSG_COMBAT_HOSTILEPLAYER_HITS", "SelfDamageEvent")
 
 	MageHUD:RegisterEvent("CHAT_MSG_SPELL_SELF_DAMAGE", "SelfDamageEvent") -- self is only the target for spells that hurt yourself
 
@@ -373,7 +378,6 @@ function MageHUD:CastEvent(caster, target, event, spellID, castDuration)
 
 	ShieldTracker.current_values[shieldName] = absorbAmount
 	ShieldTracker.max_values[shieldName] = absorbAmount
-
 	-- add to active shields for each type in buffNameToShieldTypes
 	for _, dmgType in ipairs(buffNameToShieldTypes[shieldName]) do
 		table.insert(ShieldTracker.active_shields[dmgType], shieldName)
@@ -382,8 +386,8 @@ function MageHUD:CastEvent(caster, target, event, spellID, castDuration)
 	ShieldTracker.last_cast_shield = shieldName
 
 	-- shorten shield name for display
-	if shieldName == "The Burrower\'s Shell" then
-		shieldName = "Burrower Shell"
+	if shieldName == LST["The Burrower\'s Shell"] then
+		shieldName = LST["Burrower Shell"]
 	end
 	ShieldTracker.last_cast_string = "+" .. tostring(absorbAmount) .. " from " .. shieldName
 
@@ -391,7 +395,8 @@ function MageHUD:CastEvent(caster, target, event, spellID, castDuration)
 end
 
 function MageHUD:AuraFadeEvent()
-	local _, _, buffName = string.find(arg1, "(.-)%s+fades from you") -- shadow protection has 2 spaces ...
+	-- local _, _, buffName = string.find(arg1, LST["(.-)%s+fades from you"]) -- shadow protection has 2 spaces ...
+    local _, _, buffName = string.find(arg1, LST["(.+) fades from you"]) -- shadow protection has 2 spaces ...
 	if buffName then
 		if ShieldTracker.current_values[buffName] then
 			ShieldTracker.current_values[buffName] = nil
@@ -422,12 +427,12 @@ end
 
 function MageHUD:ParseElementalAbsorbAmount(eventStr)
 	-- example eventStr: "You suffer 0 frost damage from Blizzard. (10 absorbed)"
-	local _, _, dmgType, amt = string.find(eventStr, "%d+ (%w+) damage from.*%((%d+) absorbed%)")
+	local _, _, dmgType, amt = string.find(eventStr, LST["%d+ (%w+) damage from.*%((%d+) absorbed%)"])
 	if dmgType and amt then
 		return dmgType, tonumber(amt)
 	end
 
-	_, _, dmgType, amt = string.find(eventStr, "%d+ (%w+) damage.*%((%d+) absorbed%)")
+	_, _, dmgType, amt = string.find(eventStr, LST["%d+ (%w+) damage.*%((%d+) absorbed%)"])
 	if dmgType and amt then
 		return dmgType, tonumber(amt)
 	end
@@ -436,9 +441,9 @@ end
 
 function MageHUD:ParseAbsorbAmount(eventStr)
 	-- example eventStr: "Mob hits you for 0. (10 absorbed)"
-	local _, _, amt = string.find(eventStr, "for %d+.*%((%d+) absorbed%)")
+	local _, _, amt = string.find(eventStr, LST["for %d+.*%((%d+) absorbed%)"])
 	if amt then
-		return "Physical", tonumber(amt)
+		return LST["Physical"], tonumber(amt)
 	end
 
 	return nil, nil
@@ -454,7 +459,7 @@ function MageHUD:DeductShield(dmgType, amt)
 			if amt >= ShieldTracker.current_values[shield] then
 				newAmt = amt - ShieldTracker.current_values[shield]
 				-- if not a protection potion, remove shield so dmg can be applied to next shield
-				if not string.find(shield, "Protection") then
+				if not string.find(shield, LST["Protection"]) then
 					ShieldTracker.current_values[shield] = 0
 					ShieldTracker:RemoveActiveShield(dmgType)
 				else
@@ -475,7 +480,12 @@ end
 
 function MageHUD:SelfDamageEvent()
 	-- check that self was the target (hits you for or crits you for)
-	if not string.find(arg1, "its you for") then
+
+    -- Fs's Fireball crits you for 0 Fire damage. (307 absorbed)
+    -- You suffer 1 Fire damage from Fs's Fireball.
+    -- Fs hits you for 0. (8 absorbed)
+
+	if not string.find(arg1, LST["hits you for"]) and not string.find(arg1, LST["crits you for"]) and not string.find(arg1, LST["^You suffer"]) then
 		return
 	end
 
@@ -515,13 +525,13 @@ function MageHUD:DeathEvent()
 	ShieldTracker.current_values = {};
 	ShieldTracker.max_values = {};
 	ShieldTracker.active_shields = {
-		Physical = {}, -- shields that block physical damage
-		Fire = {}, -- shields that block fire damage
-		Frost = {}, -- shields that block frost damage
-		Arcane = {}, -- shields that block arcane damage
-		Shadow = {}, -- shields that block shadow damage
-		Nature = {}, -- shields that block nature damage
-		Holy = {}, -- shields that block holy damage
+        [LST["Physical"]] = {}, -- shields that block physical damage
+		[LST["Fire"]] = {}, -- shields that block fire damage
+		[LST["Frost"]] = {}, -- shields that block frost damage
+		[LST["Arcane"]] = {}, -- shields that block arcane damage
+		[LST["Shadow"]] = {}, -- shields that block shadow damage
+		[LST["Nature"]] = {}, -- shields that block nature damage
+		[LST["Holy"]] = {}, -- shields that block holy damage
 	}
 	MageHUD:TriggerEvent("MAGEHUD_SHIELD_UPDATE")
 end

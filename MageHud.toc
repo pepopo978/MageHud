@@ -1,5 +1,5 @@
 ## Interface: 11200
-## Title: MageHUD |cff7fff7f -Ace2-|r
+## Title: [|CFF33AAFFSUPERWOW|R] MageHUD |cff7fff7f -Ace2-|r
 ## Notes: Mage HUD based on NurfedHUD.
 ## Author: Uruloke, Balakinuser, Pepopo
 ## SavedVariables: MageHUDDB
@@ -29,6 +29,8 @@ Libs\Dewdrop\Dewdrop-2.0.lua
 Libs\Tablet\Tablet-2.0.lua
 Libs\FuBarPlugin\FuBarPlugin-2.0.lua
 
+
+
 # Core addon
 Locale_enUS.lua
 Core.xml
@@ -47,4 +49,3 @@ Rings\Casting.lua
 Rings\ShieldCombined.lua
 Rings\ShieldIceBarrier.lua
 Rings\ShieldMana.lua
-

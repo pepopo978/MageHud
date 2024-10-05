@@ -1,4 +1,5 @@
 local module = MageHUD:NewModule("ShieldIceBarrier")
+local LST = AceLibrary("AceLocale-2.0"):new("MageHUD_ShieldTracker")
 local _, _, rev = string.find("$Rev: 11018 $", "([0-9]+)")
 module.version = "2.0." .. rev
 module.unit = "player"
@@ -23,7 +24,7 @@ function module:Initialize()
 	-- Setup the frame we need
 	self.f = self:CreateRing(true, MageHUDFrame)
 
-	self.ShieldText = self:CreateFontString(self.f, "BACKGROUND", { 150, 15 }, 14, "RIGHT", { 1.0, 1.0, 0.0 }, { "TOPRIGHT", MageHUDFrameText, "TOPLEFT", 0, 0 })
+	self.ShieldText = self:CreateFontString(self.f, "BACKGROUND", { 150, 15 }, 14, "RIGHT", { 1.0, 1.0, 0.0 }, { "TOPRIGHT", MageHUDFrameText, "TOPLEFT", 0, -30 })
 	self.ShieldPerc = self:CreateFontString(self.f, "BACKGROUND", { 40, 14 }, 12, "RIGHT", { 1.0, 1.0, 1.0 }, { "TOPRIGHT", self.ShieldText, "BOTTOMRIGHT", 0, 0 })
 	self.Label = self:CreateFontString(self.f, "BACKGROUND", { 150, 15 }, 12, "RIGHT", { 1.0, 1.0, 1.0 }, { "TOPRIGHT", self.ShieldPerc, "BOTTOMRIGHT", 0, 0 })
 end
@@ -77,7 +78,7 @@ function module:Enable()
 		self.f:Hide()
 	end
 
-	self.Label:SetText("Ice Barrier")
+	self.Label:SetText(LST["Ice Barrier"])
 
 	-- Register the events we will use
 	self:RegisterEvent("MAGEHUD_SHIELD_UPDATE", "UpdateShield")
@@ -89,12 +90,12 @@ function module:Enable()
 end
 
 function module:UpdateShield()
-	local current = ShieldTracker.current_values["Ice Barrier"]
+	local current = ShieldTracker.current_values[LST["Ice Barrier"]]
 
 	if not current or current == 0 then
 		self.f:Hide()
 	else
-		local max = ShieldTracker.max_values["Ice Barrier"]
+		local max = ShieldTracker.max_values[LST["Ice Barrier"]]
 
 		self.f:SetMax(max)
 		self.f:SetValue(current)
