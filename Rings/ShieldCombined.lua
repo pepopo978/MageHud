@@ -23,10 +23,10 @@ module.localized = true
 function module:Initialize()
 	-- Setup the frame we need
 	self.f = self:CreateRing(true, MageHUDFrame)
-
-	self.ShieldText = self:CreateFontString(self.f, "BACKGROUND", { 150, 15 }, 14, "LEFT", { 1.0, 1.0, 0.0 }, { "TOPLEFT", MageHUDFrameText, "TOPLEFT", 8, -30 })
-	self.ShieldPerc = self:CreateFontString(self.f, "BACKGROUND", { 40, 14 }, 12, "LEFT", { 1.0, 1.0, 1.0 }, { "TOPLEFT", self.ShieldText, "BOTTOMLEFT", 0, 0 })
-	self.Label = self:CreateFontString(self.f, "BACKGROUND", { 200, 15 }, 12, "LEFT", { 1.0, 1.0, 1.0 }, { "TOPLEFT", self.ShieldPerc, "BOTTOMLEFT", -40, 0 })
+                        -- CreateFontString(parent, layer, size, fontsize, justify, color, point)
+	self.ShieldText = self:CreateFontString(self.f, "BACKGROUND", { 150, 15 }, 14, "CENTER", { 1.0, 1.0, 0.0 }, { "TOP", MageHUDFrameText, "TOP", 0, -30})
+	self.ShieldPerc = self:CreateFontString(self.f, "BACKGROUND", { 40, 14 }, 12, "CENTER", { 1.0, 1.0, 1.0 }, { "TOP", self.ShieldText, "BOTTOM", 0, 0 })
+	self.Label = self:CreateFontString(self.f, "BACKGROUND", { 200, 15 }, 12, "CENTER", { 1.0, 1.0, 1.0 }, { "TOP", self.ShieldPerc, "BOTTOM", 0, 0 })
 end
 
 function module:Update()

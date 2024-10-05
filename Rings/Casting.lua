@@ -28,7 +28,7 @@ function module:Initialize()
 	-- Setup the frame we need
 	self.f = self:CreateRing(true, MageHUDFrame)
 
-	self.Text = self:CreateFontString(self.f, "BACKGROUND", {175, 14}, 12, "LEFT", {1.0, 1.0, 1.0}, {"TOP", "MageHUDFrameText", "BOTTOM", -28, 0})
+	self.Text = self:CreateFontString(self.f, "BACKGROUND", {175, 14}, 12, "LEFT", {1.0, 1.0, 1.0}, {"TOP", MageHUDFrameText, "BOTTOM", -28, 0})
 	self.Time = self:CreateFontString(self.f, "BACKGROUND", {40, 14}, 12, "RIGHT", {1.0, 1.0, 1.0}, {"TOPLEFT", self.Text, "TOPRIGHT", 0, 0})
 
 	-- Register timers
