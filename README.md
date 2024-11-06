@@ -1,5 +1,7 @@
 # MageHud
 
+<b>Requires SuperWoW</b>
+
 MageHUD is a fork of ArcHud with some of the same original arcs and additional arcs for mage shields.
 
 WARNING: If you disable on minimap it seems to break the addon, had to delete .wtf file to fix.  Will figure out why.
