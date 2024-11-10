@@ -1,6 +1,7 @@
 ## Interface: 11200
 ## Title: MageHUD |cff7fff7f -Ace2-|r
 ## Notes: Mage HUD based on NurfedHUD.
+## Notes-ruRU: Mage HUD на основе NurfedHUD.
 ## Author: Uruloke, Balakinuser, Pepopo
 ## SavedVariables: MageHUDDB
 ## Version: 2.0
@@ -22,8 +23,7 @@ Libs\AceAddon\AceAddon-2.0.lua
 Libs\AceHook\AceHook-2.0.lua
 Libs\AceDB\AceDB-2.0.lua
 Libs\AceDebug\AceDebug-2.0.lua
-Libs\AceLocale-2.0\AceLocale-2.0.lua
-#Libs\AceLocale-2.2\AceLocale-2.2.lua
+Libs\AceLocale-2.2\AceLocale-2.2.lua
 Libs\AceModuleCore\AceModuleCore-2.0.lua
 Libs\Metrognome\Metrognome-2.0.lua
 Libs\Dewdrop\Dewdrop-2.0.lua

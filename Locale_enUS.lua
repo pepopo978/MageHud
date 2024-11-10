@@ -1,6 +1,6 @@
 ------------------------------
 ----- Translation for enEN
-local L = AceLibrary("AceLocale-2.0"):new("MageHUD_Core")
+local L = AceLibrary("AceLocale-2.2"):new("MageHUD_Core")
 
 L:RegisterTranslations("enUS", function()
 	return {
@@ -15,12 +15,12 @@ L:RegisterTranslations("enUS", function()
 
 		FONT = "FRIZQT__.TTF",
 
-		["Version: "] = true,
-		["Author: "] = true,
-
 		--	Options
 		TEXT = {
 			TITLE = "MageHUD Options",
+			VERSION = "Version: ",
+			AUTHOR = "Author: ",
+			INSTANT = "Instant",
 
 			DISPLAY = "Display options",
 			ATTACHTOP = "Attach target frame to top",
@@ -66,7 +66,7 @@ L:RegisterTranslations("enUS", function()
 	}
 end)
 
-local LM = AceLibrary("AceLocale-2.0"):new("MageHUD_Module")
+local LM = AceLibrary("AceLocale-2.2"):new("MageHUD_Module")
 
 LM:RegisterTranslations("enUS", function()
 	return {
@@ -74,6 +74,7 @@ LM:RegisterTranslations("enUS", function()
 
 		["Version: "] = true,
 		["Author: "] = true,
+		["Instant"] = true,
 
 		["Health"] = "Player Health",
 		["Mana"] = "Player Mana",

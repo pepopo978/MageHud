@@ -8,33 +8,33 @@ MageHUD:SetModuleMixins("AceEvent-2.0", "AceHook-2.0", "Metrognome-2.0")
 MageHUD.modulePrototype.parent = MageHUD
 
 -- Debug function uses the core :Debug function
-function MageHUD.modulePrototype:Debug(level, ...)
+function MageHUD.modulePrototype:Debug(level,...)
 	if(self.parent.LevelDebug) then
 		self.parent:LevelDebug(level, "["..self.name.."] "..unpack(arg))
 	end
 end
 
 function MageHUD.modulePrototype:RegisterDewdropSettings()
-	table.insert(self.parent.dewdrop_menu.L1, {"text", self.L(self.name), "hasArrow", true, "value", "L2_"..self.name})
+	table.insert(self.parent.dewdrop_menu.L1, {"text", self.L[self.name], "hasArrow", true, "value", "L2_"..self.name})
 
 	self.parent.dewdrop_menu["L2_"..self.name] = {
 		{
-			"text", self.L(self.name),
+			"text", self.L[self.name],
 			"isTitle", true
 		},
 		{
-			"text", self.L("Version: ")..self.version,
+			"text", self.L["Version: "]..self.version,
 			"notClickable", true
 		},
 		{
-			"text", self.L("Author: ")..self.author,
+			"text", self.L["Author: "]..self.author,
 			"notClickable", true
 		},
 		{},
 		{
-			"text", self.L("TEXT","ENABLED"),
-			"tooltipTitle", self.L("TEXT","ENABLED"),
-			"tooltipText", self.L("TOOLTIP","ENABLED"),
+			"text", self.L["TEXT"]["ENABLED"],
+			"tooltipTitle", self.L["TEXT"]["ENABLED"],
+			"tooltipText", self.L["TOOLTIP"]["ENABLED"],
 			"checked", false,
 			"func", MageHUD.modDB,
 			"arg1", "toggle",
@@ -42,9 +42,9 @@ function MageHUD.modulePrototype:RegisterDewdropSettings()
 			"arg3", self.name
 		},
 		{
-			"text", self.L("TEXT","OUTLINE"),
-			"tooltipTitle", self.L("TEXT","OUTLINE"),
-			"tooltipText", self.L("TOOLTIP","OUTLINE"),
+			"text", self.L["TEXT"]["OUTLINE"],
+			"tooltipTitle", self.L["TEXT"]["OUTLINE"],
+			"tooltipText", self.L["TOOLTIP"]["OUTLINE"],
 			"checked", false,
 			"func", MageHUD.modDB,
 			"arg1", "toggle",
@@ -56,9 +56,9 @@ function MageHUD.modulePrototype:RegisterDewdropSettings()
 	for k,v in ipairs(self.options) do
 		if(type(v) == "table") then
 			t = {
-				"text", self.L("TEXT",v.text),
-				"tooltipTitle", self.L("TEXT",v.text),
-				"tooltipText", self.L("TOOLTIP",v.tooltip),
+				"text", self.L["TEXT"][v.text],
+				"tooltipTitle", self.L["TEXT"][v.text],
+				"tooltipText", self.L["TOOLTIP"][v.tooltip],
 				"checked", false,
 				"func", MageHUD.modDB,
 				"arg1", "toggle",
@@ -71,16 +71,16 @@ function MageHUD.modulePrototype:RegisterDewdropSettings()
 
 	if(self.options.attach) then
 		t = {
-			"text", self.L("TEXT","SIDE"),
-			"tooltipTitle", self.L("TEXT","SIDE"),
-			"tooltipText", self.L("TOOLTIP","SIDE"),
+			"text", self.L["TEXT"]["SIDE"],
+			"tooltipTitle", self.L["TEXT"]["SIDE"],
+			"tooltipText", self.L["TOOLTIP"]["SIDE"],
 			"hasArrow", true,
 			"value", "L3_"..self.name
 		}
 		table.insert(self.parent.dewdrop_menu["L2_"..self.name], t)
 		self.parent.dewdrop_menu["L3_"..self.name] = {
 			{
-				"text", self.L("SIDE","LEFT"),
+				"text", self.L["SIDE"]["LEFT"],
 				"isRadio", true,
 				"checked", true,
 				"func", MageHUD.modDB,
@@ -90,7 +90,7 @@ function MageHUD.modulePrototype:RegisterDewdropSettings()
 				"arg4", 1
 			},
 			{
-				"text", self.L("SIDE","RIGHT"),
+				"text", self.L["SIDE"]["RIGHT"],
 				"isRadio", true,
 				"checked", false,
 				"func", MageHUD.modDB,
@@ -101,9 +101,9 @@ function MageHUD.modulePrototype:RegisterDewdropSettings()
 			},
 		}
 		t = {
-			"text", self.L("TEXT","LEVEL"),
-			"tooltipTitle", self.L("TEXT","LEVEL"),
-			"tooltipText", self.L("TOOLTIP","LEVEL"),
+			"text", self.L["TEXT"]["LEVEL"],
+			"tooltipTitle", self.L["TEXT"]["LEVEL"],
+			"tooltipText", self.L["TOOLTIP"]["LEVEL"],
 			"hasArrow", true,
 			"hasSlider", true,
 			"sliderMin", -5,
@@ -126,7 +126,7 @@ end
 function MageHUD.modulePrototype:OnInitialize()
 	self.parent:ToggleModuleActive(self, false)
 	self:Debug(d_notice, "Creating locale instance")
-	self.L = AceLibrary("AceLocale-2.0"):new("MageHUD_Module")
+	self.L = AceLibrary("AceLocale-2.2"):new("MageHUD_Module")
 	if(self.Initialize) then
 		self:Initialize()
 		self:Debug(d_info, "Ring initialized")
@@ -162,14 +162,14 @@ function MageHUD.modulePrototype:OnInitialize()
 	end
 
 	self:Debug(d_notice, "Registering Metrognome timers")
-	if(not self:MetroStatus(self.name .. "Alpha")) then
-		self:RegisterMetro(self.name .. "Alpha", MageHUDRingTemplate.AlphaUpdate, 0.01, self.f)
+	if(not self:MetroStatus(self.name.. "Alpha")) then
+		self:RegisterMetro(self.name.. "Alpha", MageHUDRingTemplate.AlphaUpdate, 0.01, self.f)
 	end
-	if(not self:MetroStatus(self.name .. "Fade")) then
-		self:RegisterMetro(self.name .. "Fade", MageHUDRingTemplate.DoFadeUpdate, 0.01, self.f)
+	if(not self:MetroStatus(self.name.. "Fade")) then
+		self:RegisterMetro(self.name.. "Fade", MageHUDRingTemplate.DoFadeUpdate, 0.01, self.f)
 	end
-	if(not self:MetroStatus(self.name .. "Update")) then
-		self:RegisterMetro(self.name .. "Update", MageHUDRingTemplate.UpdateAlpha, 0.05, self)
+	if(not self:MetroStatus(self.name.. "Update")) then
+		self:RegisterMetro(self.name.. "Update", MageHUDRingTemplate.UpdateAlpha, 0.05, self)
 	end
 	self:Debug(d_info, "Ring loaded")
 end
@@ -344,7 +344,7 @@ function MageHUD.modulePrototype:CreateFontString(parent, layer, size, fontsize,
 
 	fs:SetWidth(width)
 	fs:SetHeight(height)
-	fs:SetFont("Fonts\\"..self.L"FONT", fontsize, "OUTLINE")
+	fs:SetFont("Fonts\\"..self.L["FONT"], fontsize, "OUTLINE")
 	if(color) then
 		fs:SetTextColor(unpack(color))
 	end
