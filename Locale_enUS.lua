@@ -17,6 +17,7 @@ L:RegisterTranslations("enUS", function()
 
 		["Version: "] = true,
 		["Author: "] = true,
+		["Instant"] = true,
 
 		--	Options
 		TEXT = {
@@ -74,6 +75,7 @@ LM:RegisterTranslations("enUS", function()
 
 		["Version: "] = true,
 		["Author: "] = true,
+		["Instant"] = true,
 
 		["Health"] = "Player Health",
 		["Mana"] = "Player Mana",
