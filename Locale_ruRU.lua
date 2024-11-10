@@ -18,6 +18,7 @@ L:RegisterTranslations("ruRU", function()
 
 		["Version: "] = "Версия: ",
 		["Author: "] = "Автор: ",
+		["Instant"] = "Мгновенно",
 
 		-- Опции
 		TEXT = {
@@ -75,6 +76,7 @@ LM:RegisterTranslations("ruRU", function()
 
 		["Version: "] = "Версия: ",
 		["Author: "] = "Автор: ",
+		["Instant"] = "Мгновенно",
 
 		["Health"] = "Здоровье игрока",
 		["Mana"] = "Мана игрока",

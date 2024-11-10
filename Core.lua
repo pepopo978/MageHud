@@ -256,7 +256,7 @@ function MageHUD:OnInitialize()
 				"hasSlider", true,
 				"sliderMin", 0,
 				"sliderMax", 5,
-				"sliderMinText", "Instant",
+				"sliderMinText", L["Instant"],
 				"sliderMaxText", "5s",
 				"sliderStep", 0.5,
 				"sliderValue", 0,
