@@ -2,7 +2,7 @@
 MageHUD = AceLibrary("AceAddon-2.0"):new("AceEvent-2.0", "AceHook-2.0", "AceConsole-2.0", "AceDB-2.0", "AceModuleCore-2.0", "AceDebug-2.0", "Metrognome-2.0")
 
 -- Locale object
-local L = AceLibrary("AceLocale-2.0"):new("MageHUD_Core")
+local L = AceLibrary("AceLocale-2.2"):new("MageHUD_Core")
 
 -- Debugging levels
 --   1 Warning
@@ -40,12 +40,12 @@ MageHUD:RegisterChatCommand({ "/MageHUD", "/ah" }, {
 		reset = {
 			type = "group",
 			name = "reset",
-			desc = L "CMD_RESET",
+			desc = L["CMD_RESET"],
 			args = {
 				confirm = {
 					type = "execute",
 					name = "CONFIRM",
-					desc = L "CMD_RESET_CONFIRM",
+					desc = L["CMD_RESET_CONFIRM"],
 					func = "ResetOptionsConfirm",
 				}
 			}
@@ -53,7 +53,7 @@ MageHUD:RegisterChatCommand({ "/MageHUD", "/ah" }, {
 		config = {
 			type = "execute",
 			name = "config",
-			desc = L "CMD_OPTS_FRAME",
+			desc = L["CMD_OPTS_FRAME"],
 			func = function()
 				if not ddframe then
 					ddframe = CreateFrame("Frame", nil, UIParent)
@@ -71,7 +71,7 @@ MageHUD:RegisterChatCommand({ "/MageHUD", "/ah" }, {
 		debug = {
 			type = "text",
 			name = "debug",
-			desc = L "CMD_OPTS_DEBUG",
+			desc = L["CMD_OPTS_DEBUG"],
 			get = function()
 				return debugLevels[MageHUD:GetDebugLevel() or 4]
 			end,
@@ -153,7 +153,6 @@ function MageHUD.createDDMenu(level, menu, skipfirst)
 					MageHUD:LevelDebug(d_notice, "Creating button on level %s in menu %s", level, menu)
 					id, val, arg3, arg4, isradio = nil, nil, nil, nil, nil
 					for a, b in ipairs(v) do
-						--MageHUD:LevelDebug(d_notice, "  ID: %d, Value: %s", a, (type(b) == "function" and "function" or b))
 						if (b == "checked" or b == "sliderValue") then
 							id = a + 1
 						elseif (b == "isRadio" and v[a + 1]) then
@@ -219,44 +218,44 @@ function MageHUD:OnInitialize()
 	self:LevelDebug(d_notice, "Creating core addon Dewdrop menu")
 	self.dewdrop_menu = {
 		["L1"] = {
-			{ "text", L("TEXT", "TITLE"), "isTitle", true },
-			{ "text", L("Version: ") .. self.version, "notClickable", true },
-			{ "text", L("Author: ") .. self.author, "notClickable", true },
+			{ "text", L["TEXT"]["TITLE"], "isTitle", true },
+			{ "text", L["TEXT"]["VERSION"] .. self.version, "notClickable", true },
+			{ "text", L["TEXT"]["AUTHOR"] .. self.author, "notClickable", true },
 			{},
-			{ "text", L("TEXT", "DISPLAY"), "hasArrow", true, "value", "L2_display" },
-			{ "text", L("TEXT", "FADE"), "hasArrow", true, "value", "L2_fade" },
-			{ "text", L("TEXT", "MISC"), "hasArrow", true, "value", "L2_misc" },
+			{ "text", L["TEXT"]["DISPLAY"], "hasArrow", true, "value", "L2_display" },
+			{ "text", L["TEXT"]["FADE"], "hasArrow", true, "value", "L2_fade" },
+			{ "text", L["TEXT"]["MISC"], "hasArrow", true, "value", "L2_misc" },
 			{},
-			{ "text", L("TEXT", "RINGS"), "isTitle", true },
+			{ "text", L["TEXT"]["RINGS"], "isTitle", true },
 		},
 		["L2_display"] = {
 			{
-				"text", L("TEXT", "ATTACHTOP"),
-				"tooltipTitle", L("TEXT", "ATTACHTOP"),
-				"tooltipText", L("TOOLTIP", "ATTACHTOP"),
+				"text", L["TEXT"]["ATTACHTOP"],
+				"tooltipTitle", L["TEXT"]["ATTACHTOP"],
+				"tooltipText", L["TOOLTIP"]["ATTACHTOP"],
 				"checked", false,
 				"func", MageHUD.modDB,
 				"arg1", "toggle",
 				"arg2", "AttachTop"
 			},
 			{
-				"text", L("TEXT", "HOVERMSG"),
-				"tooltipTitle", L("TEXT", "HOVERMSG"),
-				"tooltipText", L("TOOLTIP", "HOVERMSG"),
+				"text", L["TEXT"]["HOVERMSG"],
+				"tooltipTitle", L["TEXT"]["HOVERMSG"],
+				"tooltipText", L["TOOLTIP"]["HOVERMSG"],
 				"checked", false,
 				"func", MageHUD.modDB,
 				"arg1", "toggle",
 				"arg2", "HoverMsg"
 			},
 			{
-				"text", L("TEXT", "HOVERDELAY"),
-				"tooltipTitle", L("TEXT", "HOVERDELAY"),
-				"tooltipText", L("TOOLTIP", "HOVERDELAY"),
+				"text", L["TEXT"]["HOVERDELAY"],
+				"tooltipTitle", L["TEXT"]["HOVERDELAY"],
+				"tooltipText", L["TOOLTIP"]["HOVERDELAY"],
 				"hasArrow", true,
 				"hasSlider", true,
 				"sliderMin", 0,
 				"sliderMax", 5,
-				"sliderMinText", "Instant",
+				"sliderMinText", L["TEXT"]["INSTANT"],
 				"sliderMaxText", "5s",
 				"sliderStep", 0.5,
 				"sliderValue", 0,
@@ -267,9 +266,9 @@ function MageHUD:OnInitialize()
 		},
 		["L2_fade"] = {
 			{
-				"text", L("TEXT", "FADE_FULL"),
-				"tooltipTitle", L("TEXT", "FADE_FULL"),
-				"tooltipText", L("TOOLTIP", "FADE_FULL"),
+				"text", L["TEXT"]["FADE_FULL"],
+				"tooltipTitle", L["TEXT"]["FADE_FULL"],
+				"tooltipText", L["TOOLTIP"]["FADE_FULL"],
 				"hasArrow", true,
 				"hasSlider", true,
 				"sliderStep", 0.01,
@@ -280,9 +279,9 @@ function MageHUD:OnInitialize()
 				"sliderArg2", "FadeFull"
 			},
 			{
-				"text", L("TEXT", "FADE_OOC"),
-				"tooltipTitle", L("TEXT", "FADE_OOC"),
-				"tooltipText", L("TOOLTIP", "FADE_OOC"),
+				"text", L["TEXT"]["FADE_OOC"],
+				"tooltipTitle", L["TEXT"]["FADE_OOC"],
+				"tooltipText", L["TOOLTIP"]["FADE_OOC"],
 				"hasArrow", true,
 				"hasSlider", true,
 				"sliderStep", 0.01,
@@ -293,9 +292,9 @@ function MageHUD:OnInitialize()
 				"sliderArg2", "FadeOOC"
 			},
 			{
-				"text", L("TEXT", "FADE_IC"),
-				"tooltipTitle", L("TEXT", "FADE_IC"),
-				"tooltipText", L("TOOLTIP", "FADE_IC"),
+				"text", L["TEXT"]["FADE_IC"],
+				"tooltipTitle", L["TEXT"]["FADE_IC"],
+				"tooltipText", L["TOOLTIP"]["FADE_IC"],
 				"hasArrow", true,
 				"hasSlider", true,
 				"sliderStep", 0.01,
@@ -308,9 +307,9 @@ function MageHUD:OnInitialize()
 		},
 		["L2_misc"] = {
 			{
-				"text", L("TEXT", "WIDTH"),
-				"tooltipTitle", L("TEXT", "WIDTH"),
-				"tooltipText", L("TOOLTIP", "WIDTH"),
+				"text", L["TEXT"]["WIDTH"],
+				"tooltipTitle", L["TEXT"]["WIDTH"],
+				"tooltipText", L["TOOLTIP"]["WIDTH"],
 				"hasArrow", true,
 				"hasSlider", true,
 				"sliderMin", 30,
@@ -322,9 +321,9 @@ function MageHUD:OnInitialize()
 				"sliderArg2", "Width"
 			},
 			{
-				"text", L("TEXT", "YLOC"),
-				"tooltipTitle", L("TEXT", "YLOC"),
-				"tooltipText", L("TOOLTIP", "YLOC"),
+				"text", L["TEXT"]["YLOC"],
+				"tooltipTitle", L["TEXT"]["YLOC"],
+				"tooltipText", L["TOOLTIP"]["YLOC"],
 				"hasArrow", true,
 				"hasSlider", true,
 				"sliderMin", -50,
@@ -336,9 +335,9 @@ function MageHUD:OnInitialize()
 				"sliderArg2", "YLoc"
 			},
 			{
-				"text", L("TEXT", "SCALE"),
-				"tooltipTitle", L("TEXT", "SCALE"),
-				"tooltipText", L("TOOLTIP", "SCALE"),
+				"text", L["TEXT"]["SCALE"],
+				"tooltipTitle", L["TEXT"]["SCALE"],
+				"tooltipText", L["TOOLTIP"]["SCALE"],
 				"hasArrow", true,
 				"hasSlider", true,
 				"sliderStep", 0.01,
@@ -350,18 +349,18 @@ function MageHUD:OnInitialize()
 				"sliderArg2", "Scale"
 			},
 			{
-				"text", L("TEXT", "RINGVIS"),
-				"tooltipTitle", L("TEXT", "RINGVIS"),
-				"tooltipText", L("TOOLTIP", "RINGVIS"),
+				"text", L["TEXT"]["RINGVIS"],
+				"tooltipTitle", L["TEXT"]["RINGVIS"],
+				"tooltipText", L["TOOLTIP"]["RINGVIS"],
 				"hasArrow", true,
 				"value", "L3_ringvis"
 			},
 		},
 		["L3_ringvis"] = {
 			{
-				"text", L("TEXT", "RINGVIS_1"),
-				"tooltipTitle", L("TEXT", "RINGVIS_1"),
-				"tooltipText", L("TOOLTIP", "RINGVIS_1"),
+				"text", L["TEXT"]["RINGVIS_1"],
+				"tooltipTitle", L["TEXT"]["RINGVIS_1"],
+				"tooltipText", L["TOOLTIP"]["RINGVIS_1"],
 				"isRadio", true,
 				"checked", true,
 				"func", MageHUD.modDB,
@@ -370,9 +369,9 @@ function MageHUD:OnInitialize()
 				"arg3", 1
 			},
 			{
-				"text", L("TEXT", "RINGVIS_2"),
-				"tooltipTitle", L("TEXT", "RINGVIS_2"),
-				"tooltipText", L("TOOLTIP", "RINGVIS_2"),
+				"text", L["TEXT"]["RINGVIS_2"],
+				"tooltipTitle", L["TEXT"]["RINGVIS_2"],
+				"tooltipText", L["TOOLTIP"]["RINGVIS_2"],
 				"isRadio", true,
 				"checked", false,
 				"func", MageHUD.modDB,
@@ -381,9 +380,9 @@ function MageHUD:OnInitialize()
 				"arg3", 2
 			},
 			{
-				"text", L("TEXT", "RINGVIS_3"),
-				"tooltipTitle", L("TEXT", "RINGVIS_3"),
-				"tooltipText", L("TOOLTIP", "RINGVIS_3"),
+				"text", L["TEXT"]["RINGVIS_3"],
+				"tooltipTitle", L["TEXT"]["RINGVIS_3"],
+				"tooltipText", L["TOOLTIP"]["RINGVIS_3"],
 				"isRadio", true,
 				"checked", false,
 				"func", MageHUD.modDB,
@@ -508,7 +507,7 @@ function MageHUD:ResetOptionsConfirm()
 	self:OnProfileDisable()
 	self:OnProfileEnable()
 	self:TriggerEvent("MAGEHUD_MODULE_UPDATE")
-	self:Print(L "TEXT_RESET_CONFIRM")
+	self:Print(L["TEXT"]["RESET_CONFIRM"])
 end
 
 function MageHUD:SetAuraTooltip(this)
@@ -562,7 +561,7 @@ function MageHUD:UpdateFonts(tbl)
 					self:LevelDebug(d_info, "UpdateFonts: fontName = %s, localeFont = %s", fontName, L "FONT")
 				end
 				if (fontName and not string.find(fontName, L "FONT")) then
-					v:SetFont("Fonts\\" .. L "FONT", fontSize, fontFlags)
+					v:SetFont("Fonts\\" .. L["FONT"], fontSize, fontFlags)
 					update = true
 				end
 			end

@@ -1,16 +1,16 @@
 --[[
-Name: Tablet-2.0
-Revision: $Rev: 14636 $
-Author(s): ckknight (ckknight@gmail.com)
-Website: http://ckknight.wowinterface.com/
-Documentation: http://wiki.wowace.com/index.php/Tablet-2.0
-SVN: http://svn.wowace.com/root/trunk/TabletLib/Tablet-2.0
-Description: A library to provide an efficient, featureful tooltip-style display.
-Dependencies: AceLibrary, (optional) Dewdrop-2.0
+	Name: Tablet-2.0
+	Revision: $Rev: 20636 $
+	Author(s): ckknight (ckknight@gmail.com)
+	Website: http://ckknight.wowinterface.com/
+	Documentation: http://wiki.wowace.com/index.php/Tablet-2.0
+	SVN: http://svn.wowace.com/root/trunk/TabletLib/Tablet-2.0
+	Description: A library to provide an efficient, featureful tooltip-style display.
+	Dependencies: AceLibrary, (optional) Dewdrop-2.0
 ]]
 
 local MAJOR_VERSION = "Tablet-2.0"
-local MINOR_VERSION = "$Revision: 14636 $"
+local MINOR_VERSION = "$Revision: 20636 $"
 
 if not AceLibrary then error(MAJOR_VERSION .. " requires AceLibrary") end
 if not AceLibrary:IsNewVersion(MAJOR_VERSION, MINOR_VERSION) then return end
@@ -46,7 +46,21 @@ if GetLocale() == "deDE" then
 	COLOR_DESC = "Hintergrundfarbe setzen."
 	LOCK = "Sperren"
 	LOCK_DESC = "Sperrt die aktuelle Position vom Tooltip. Alt+Rechts-klick f\195\188rs Men\195\188 oder Alt+Verschieben f\195\188rs verschieben wenn es gesperrt ist."
-elseif  GetLocale() == "koKR" then
+elseif  GetLocale() == "ruRU" then
+	SCROLL_UP = "Прокрутка вверх"
+	SCROLL_DOWN = "Прокрутка вниз"
+	HINT = "Совет"
+	DETACH = "Отделить"
+	DETACH_DESC = "Отделить планшет от его источника."
+	SIZE = "Размер"
+	SIZE_DESC = "Масштаб планшета."
+	CLOSE_MENU = "Закрыть меню"
+	CLOSE_MENU_DESC = "Закрыть меню."
+	COLOR = "Цвет фона"
+	COLOR_DESC = "Установить цвет фона."
+	LOCK = "Зафиксировать"
+	LOCK_DESC = "Зафиксировать планшет в его текущем позиции. Alt+ПКМ для меню или Alt+перетаскивание для перетаскивания когда планшет зафиксирован."
+elseif GetLocale() == "koKR" then
 	SCROLL_UP = "위로 스크롤"
 	SCROLL_DOWN = "아래로 스크롤"
 	HINT = "힌트"
@@ -88,7 +102,7 @@ elseif GetLocale() == "zhTW" then
 	COLOR_DESC = "設置選單背景顏色。"
 	LOCK = "鎖定"
 	LOCK_DESC = "鎖定選單目前位置. Alt+右鍵 將顯示選項，Alt+拖動 可以移動已鎖定的選單。"
-elseif  GetLocale() == "frFR" then
+elseif GetLocale() == "frFR" then
 	SCROLL_UP = "Parcourir vers le haut"
 	SCROLL_DOWN = "Parcourir vers le bas"
 	HINT = "Astuce"
@@ -151,6 +165,7 @@ else
 end
 
 local MIN_TOOLTIP_SIZE = 200
+local TESTSTRING_EXTRA_WIDTH = 5
 local Tablet = {}
 local function getsecond(_, value)
 	return value
@@ -160,16 +175,8 @@ local sekeys
 local CleanCategoryPool
 local pool = {}
 
-local table_setn
-do
-	local version = GetBuildInfo()
-	if string.find(version, "^2%.") then
-		-- 2.0.0
-		table_setn = function() end
-	else
-		table_setn = table.setn
-	end
-end
+local lua51 = loadstring("return function(...) return ... end") and true or false
+local table_setn = lua51 and function() end or table.setn
 
 local function del(t)
 	if t then
@@ -313,6 +320,7 @@ do
 		self.width = 0--(MIN_TOOLTIP_SIZE - 20)*tablet.fontSizePercent
 		self.tablet = tablet
 		self.title = "Title"
+		self.titleR, self.titleG, self.titleB = nil, nil, nil
 		setmetatable(self, TabletData_mt)
 		return self
 	end
@@ -334,6 +342,11 @@ do
 				'font', GameTooltipHeaderText,
 				'isTitle', true
 			)
+			if self.titleR then
+				info.textR = self.titleR
+				info.textG = self.titleG
+				info.textB = self.titleB
+			end
 			self:AddCategory(info, 1)
 			del(info)
 		end
@@ -425,6 +438,12 @@ do
 	function TabletData:SetTitle(title)
 		self.title = title or "Title"
 	end
+
+	function TabletData:SetTitleColor(r, g, b)
+		self.titleR = r
+		self.titleG = g
+		self.titleB = b
+	end
 end
 do
 	local Category_mt = { __index = Category }
@@ -466,6 +485,8 @@ do
 				'textB', self.textB or 1,
 				'fakeChild', true,
 				'func', self.func,
+				'onEnterFunc', self.onEnterFunc,
+				'onLeaveFunc', self.onLeaveFunc,
 				'arg1', info.arg1,
 				'arg2', self.arg2,
 				'arg3', self.arg3,
@@ -832,7 +853,7 @@ do
 				testString:SetText(self.text)
 				local checkWidth = self.hasCheck and self.size * fontSizePercent or 0
 				self.checkWidth = checkWidth
-				w = testString:GetWidth() + self.indentation * fontSizePercent + checkWidth
+				w = testString:GetWidth() + self.indentation * fontSizePercent + checkWidth + TESTSTRING_EXTRA_WIDTH
 				if category.superCategory.x1 < w then
 					category.superCategory.x1 = w
 				end
@@ -845,7 +866,7 @@ do
 					testString:SetText(self.text)
 					local checkWidth = self.hasCheck and self.size * fontSizePercent or 0
 					self.checkWidth = checkWidth
-					w = testString:GetWidth() + self.indentation * fontSizePercent + checkWidth
+					w = testString:GetWidth() + self.indentation * fontSizePercent + checkWidth + TESTSTRING_EXTRA_WIDTH
 					if w > (MIN_TOOLTIP_SIZE - 20) * fontSizePercent then
 						w = (MIN_TOOLTIP_SIZE - 20) * fontSizePercent
 					end
@@ -864,7 +885,7 @@ do
 				local font,_,flags = testString:GetFont()
 				testString:SetFont(font, self.size2 * fontSizePercent, flags)
 				testString:SetText(self.text2)
-				w = w + 40 * fontSizePercent + testString:GetWidth()
+				w = w + 40 * fontSizePercent + testString:GetWidth() + TESTSTRING_EXTRA_WIDTH
 				if category.superCategory.x1 < w then
 					category.superCategory.x1 = w
 				end
@@ -882,7 +903,7 @@ do
 					local font,_,flags = testString:GetFont()
 					testString:SetFont(font, self.size2 * fontSizePercent, flags)
 					testString:SetText(self.text2)
-					local w = testString:GetWidth()
+					local w = testString:GetWidth() + TESTSTRING_EXTRA_WIDTH
 					if category.superCategory.x2 < w then
 						category.superCategory.x2 = w
 					end
@@ -900,7 +921,7 @@ do
 					local font,_,flags = testString:GetFont()
 					testString:SetFont(font, self.size3 * fontSizePercent, flags)
 					testString:SetText(self.text3)
-					local w = testString:GetWidth()
+					local w = testString:GetWidth() + TESTSTRING_EXTRA_WIDTH
 					if category.superCategory.x3 < w then
 						category.superCategory.x3 = w
 					end
@@ -919,7 +940,7 @@ do
 						local font,_,flags = testString:GetFont()
 						testString:SetFont(font, self.size4 * fontSizePercent, flags)
 						testString:SetText(self.text4)
-						w = testString:GetWidth()
+						w = testString:GetWidth() + TESTSTRING_EXTRA_WIDTH
 						if category.superCategory.x4 < w then
 							category.superCategory.x4 = w
 						end
@@ -938,7 +959,7 @@ do
 							local font,_,flags = testString:GetFont()
 							testString:SetFont(font, self.size5 * fontSizePercent, flags)
 							testString:SetText(self.text5)
-							w = testString:GetWidth()
+							w = testString:GetWidth() + TESTSTRING_EXTRA_WIDTH
 							if category.superCategory.x5 < w then
 								category.superCategory.x5 = w
 							end
@@ -957,7 +978,7 @@ do
 								local font,_,flags = testString:GetFont()
 								testString:SetFont(font, self.size6 * fontSizePercent, flags)
 								testString:SetText(self.text6)
-								w = testString:GetWidth()
+								w = testString:GetWidth() + TESTSTRING_EXTRA_WIDTH
 								if category.superCategory.x6 < w then
 									category.superCategory.x6 = w
 								end
@@ -990,6 +1011,9 @@ local function button_OnEnter()
 		this.self:GetScript("OnEnter")()
 	end
 	this.highlight:Show()
+	if this.onEnterFunc then
+		this.onEnterFunc()
+	end
 end
 
 local function button_OnLeave()
@@ -997,6 +1021,9 @@ local function button_OnLeave()
 		this.self:GetScript("OnLeave")()
 	end
 	this.highlight:Hide()
+	if this.onLeaveFunc then
+		this.onLeaveFunc()
+	end
 end
 
 local function NewLine(self)
@@ -1236,6 +1263,7 @@ local function AcquireFrame(self, registration, data, detachedData)
 		function tooltip:Hide(newOwner)
 			if self == tooltip or newOwner == nil then
 				old_tooltip_Hide(self)
+				return
 			end
 			self:ClearLines(true)
 			self.owner = nil
@@ -1634,6 +1662,80 @@ local function AcquireFrame(self, registration, data, detachedData)
 					end
 					Tablet:assert(type(func) == "function", "func must be a function or method")
 					button.func = func
+					local onEnterFunc = info.onEnterFunc
+					if onEnterFunc then
+						if type(onEnterFunc) == "string" then
+							if type(info.onEnterArg1) ~= "table" then
+								Tablet:error("Cannot call method " .. info.onEnterFunc .. " on a non-table")
+							end
+							onEventFunc = info.onEnterArg1[onEnterFunc]
+							if type(onEnterFunc) ~= "function" then
+								Tablet:error("Method " .. info.onEnterFunc .. " nonexistant")
+							end
+						else
+							if type(onEnterFunc) ~= "function" then
+								Tablet:error("func must be a function or method")
+							end
+						end
+						button.onEnterFunc = onEnterFunc
+						local i = 1
+						while true do
+							local k = 'onEnterArg' .. i
+							if button[k] ~= nil then
+								button[k] = nil
+							else
+								break
+							end
+							i = i + 1
+						end
+						i = 1
+						while true do
+							local k = 'onEnterArg' .. i
+							local v = info[k]
+							if v == nil then
+								break
+							end
+							button[k] = v
+							i = i + 1
+						end
+					end
+					local onLeaveFunc = info.onLeaveFunc
+					if onLeaveFunc then
+						if type(onLeaveFunc) == "string" then
+							if type(info.onLeaveArg1) ~= "table" then
+								Tablet:error("Cannot call method " .. info.onLeaveFunc .. " on a non-table")
+							end
+							onLeaveFunc = info.onLeaveArg1[onLeaveFunc]
+							if type(onLeaveFunc) ~= "function" then
+								Tablet:error("Method " .. info.onLeaveFunc .. " nonexistant")
+							end
+						else
+							if type(onLeaveFunc) ~= "function" then
+								Tablet:error("func must be a function or method")
+							end
+						end
+						button.onLeaveFunc = onLeaveFunc
+						local i = 1
+						while true do
+							local k = 'onLeaveArg' .. i
+							if button[k] ~= nil then
+								button[k] = nil
+							else
+								break
+							end
+							i = i + 1
+						end
+						i = 1
+						while true do
+							local k = 'onLeaveArg' .. i
+							local v = info[k]
+							if v == nil then
+								break
+							end
+							button[k] = v
+							i = i + 1
+						end
+					end
 					button.a1 = info.arg1
 					button.a2 = info.arg2
 					button.a3 = info.arg3
@@ -1890,12 +1992,15 @@ function AcquireDetachedFrame(self, registration, data, detachedData)
 	if not tooltip then
 		AcquireFrame(self, {})
 	end
-	local detached = CreateFrame("Frame", "Tablet20DetachedFrame" .. (table.getn(detachedTooltips) + 1), UIParent)
+	local frameName = "Tablet20DetachedFrame" .. (table.getn(detachedTooltips) + 1)
+	local detached = CreateFrame("Frame", frameName, UIParent)
 	table.insert(detachedTooltips, detached)
+	tinsert(UISpecialFrames, frameName);	
 	detached.notInUse = true
 	detached:EnableMouse(not data.locked)
 	detached:EnableMouseWheel(true)
 	detached:SetMovable(true)
+	-- tinsert(UISpecialFrames, frameName);
 	detached:SetPoint(data.anchor or "CENTER", UIParent, data.anchor or "CENTER", data.offsetx or 0, data.offsety or 0)
 
 	detached.numLines = 0
@@ -2199,6 +2304,7 @@ function Tablet:Close(parent)
 			tooltip:Hide()
 			tooltip.registration.tooltip = nil
 			tooltip.registration = nil
+			tooltip.enteredFrame = false
 		end
 		return
 	else
@@ -2215,14 +2321,19 @@ function Tablet:Close(parent)
 		tooltip.registration.tooltip = nil
 		tooltip.registration = nil
 	end
+	tooltip.enteredFrame = false
 end
 Tablet.Close = wrap(Tablet.Close, "Tablet:Close")
 
 local currentFrame
 local currentTabletData
 
-function Tablet:Open(parent)
-	self:argCheck(parent, 2, "table", "string")
+function Tablet:Open(fakeParent, parent)
+	self:argCheck(fakeParent, 2, "table", "string")
+	self:argCheck(parent, 3, "nil", "table", "string")
+	if not parent then
+		parent = fakeParent
+	end
 	local info = self.registry[parent]
 	self:assert(info, "You cannot open a tablet with an unregistered parent frame.")
 	self:Close()
@@ -2251,19 +2362,19 @@ function Tablet:Open(parent)
 			currentFrame = nil
 		end
 	end
-	frame:SetOwner(parent)
+	frame:SetOwner(fakeParent)
 	frame:children()
 	local point = info.point
-	local relativePoint = info.point
+	local relativePoint = info.relativePoint
 	if type(point) == "function" then
 		local b
-		point, b = point(parent)
+		point, b = point(fakeParent)
 		if b then
 			relativePoint = b
 		end
 	end
 	if type(relativePoint) == "function" then
-		relativePoint = relativePoint(parent)
+		relativePoint = relativePoint(fakeParent)
 	end
 	if not point then
 		point = "CENTER"
@@ -2273,7 +2384,7 @@ function Tablet:Open(parent)
 	end
 	frame:ClearAllPoints()
 	if type(parent) ~= "string" then
-		frame:SetPoint(point, parent, relativePoint)
+		frame:SetPoint(point, fakeParent, relativePoint)
 	end
 	local offsetx = 0
 	local offsety = 0
@@ -2333,13 +2444,16 @@ function Tablet:Open(parent)
 			end
 		end
 	end
-	if type(parent) ~= "string" then
-		frame:SetPoint(point, parent, relativePoint, -offsetx, -offsety)
+	if type(fakeParent) ~= "string" then
+		frame:SetPoint(point, fakeParent, relativePoint, -offsetx, -offsety)
 	end
 
 	if detachedData and (info.cantAttach or detachedData.detached) and frame == tooltip then
 		detachedData.detached = false
 		frame:Detach()
+	end
+	if (not detachedData or not detachedData.detached) and GetMouseFocus() == fakeParent then
+		self.tooltip.enteredFrame = true
 	end
 end
 Tablet.Open = wrap(Tablet.Open, "Tablet:Open")
@@ -2471,6 +2585,16 @@ function Tablet:SetTitle(text)
 end
 Tablet.SetTitle = wrap(Tablet.SetTitle, "Tablet:SetTitle")
 
+function Tablet:SetTitleColor(r, g, b)
+	self:assert(currentFrame, "You must set title color within a registration")
+	self:assert(not currentCategoryInfo, "You cannot set title color in a category.")
+	self:argCheck(r, 2, "number")
+	self:argCheck(g, 3, "number")
+	self:argCheck(b, 4, "number")
+	currentTabletData:SetTitleColor(r, g, b)
+end
+Tablet.SetTitleColor = wrap(Tablet.SetTitleColor, "Tablet:SetTitleColor")
+
 function Tablet:GetNormalFontSize()
 	return normalSize
 end
@@ -2533,11 +2657,11 @@ function Tablet:SetTransparency(parent, percent)
 	self:argCheck(parent, 2, "table", "string")
 	local info = self.registry[parent]
 	if info then
-		local data = info.data
-		local detachedData = info.detachedData
 		if info.tooltip then
 			info.tooltip:SetTransparency(percent)
 		else
+			local data = info.data
+			local detachedData = info.detachedData
 			if detachedData.detached then
 				detachedData.transparency = percent
 			elseif data then
