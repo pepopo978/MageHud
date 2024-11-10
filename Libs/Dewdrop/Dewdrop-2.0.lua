@@ -1,6 +1,6 @@
 --[[
 Name: Dewdrop-2.0
-Revision: $Rev: 15987 $
+Revision: $Rev: 17882 $
 Author(s): ckknight (ckknight@gmail.com)
 Website: http://ckknight.wowinterface.com/
 Documentation: http://wiki.wowace.com/index.php/Dewdrop-2.0
@@ -10,12 +10,18 @@ Dependencies: AceLibrary
 ]]
 
 local MAJOR_VERSION = "Dewdrop-2.0"
-local MINOR_VERSION = "$Revision: 15987 $"
+local MINOR_VERSION = "$Revision: 17900 $"
 
 if not AceLibrary then error(MAJOR_VERSION .. " requires AceLibrary") end
 if not AceLibrary:IsNewVersion(MAJOR_VERSION, MINOR_VERSION) then return end
 
 local Dewdrop = {}
+
+local VALIDATION_ERROR = "Validation error"
+local RESET_KEYBINDING_DESC = "Hit escape to clear the keybinding."
+if GetLocale() == "deDE" then
+--	VALIDATION_ERROR = "some message here..."
+end
 
 local lua51 = loadstring("return function(...) return ... end") and true or false
 
@@ -575,6 +581,17 @@ local function AcquireLevel(self, level)
 			numLevels = numLevels + 1
 			local frame = CreateFrame("Button", "Dewdrop20Level" .. numLevels, nil)
 			if i == 1 then
+				if lua51 then
+					local old_CloseSpecialWindows = CloseSpecialWindows
+					function CloseSpecialWindows()
+						local found = old_CloseSpecialWindows()
+						if levels[1]:IsShown() then
+							self:Close()
+							return 1
+						end
+						return found
+					end
+				else
 				local old_CloseWindows = CloseWindows
 				function CloseWindows(ignoreCenter)
 					local found = old_CloseWindows(ignoreCenter)
@@ -584,6 +601,7 @@ local function AcquireLevel(self, level)
 					end
 					return found
 				end
+			end
 			end
 			levels[i] = frame
 			frame.num = i
@@ -821,6 +839,8 @@ local function validateOptions(options, position, baseOptions, fromPass)
 					return '"validate" values must all be strings', position
 				end
 			end
+		elseif options.validate == "keybinding" then
+			-- no other checks
 		else
 			if type(options.usage) ~= "string" then
 				return '"usage" must be a string', position
@@ -1034,12 +1054,13 @@ function Dewdrop:FeedAceOptionsTable(options, difference)
 				end
 				local name = (v.guiIconOnly and v.icon) and "" or (v.guiName or v.name)
 				local desc = v.desc
+				local passValue = v.passValue
 				local iconHeight = v.iconHeight or 16
 				local iconWidth = v.iconWidth or 16
-				local iconCoordLeft = v.iconCoordLeft or 0
-				local iconCoordRight = v.iconCoordRight or 1
-				local iconCoordBottom = v.iconCoordBottom or 0
-				local iconCoordTop = v.iconCoordTop or 1
+				local iconCoordLeft = v.iconCoordLeft
+				local iconCoordRight = v.iconCoordRight
+				local iconCoordBottom = v.iconCoordBottom
+				local iconCoordTop = v.iconCoordTop
 				local tooltipTitle, tooltipText
 				tooltipTitle = name
 				if name ~= desc then
@@ -1251,7 +1272,7 @@ function Dewdrop:FeedAceOptionsTable(options, difference)
 
 						local editBoxValidateFunc, editBoxValidateArg1
 
-						if v.validate then
+						if v.validate and v.validate ~= "keybinding" then
 							if type(v.validate) == "function" then
 								editBoxValidateFunc = v.validate
 							else
@@ -1260,6 +1281,12 @@ function Dewdrop:FeedAceOptionsTable(options, difference)
 								end
 								editBoxValidateFunc = handler[v.validate]
 								editBoxValidateArg1 = handler
+							end
+						elseif v.validate then
+							if tooltipText then
+								tooltipText = tooltipText .. "\n\n" .. RESET_KEYBINDING_DESC
+							else
+								tooltipText = RESET_KEYBINDING_DESC
 							end
 						end
 
@@ -1280,6 +1307,7 @@ function Dewdrop:FeedAceOptionsTable(options, difference)
 							'editBoxArg2', editBoxArg2,
 							'editBoxValidateFunc', editBoxValidateFunc,
 							'editBoxValidateArg1', editBoxValidateArg1,
+							'editBoxIsKeybinding', v.validate == "keybinding",
 							'disabled', disabled,
 							'tooltipTitle', tooltipTitle,
 							'tooltipText', tooltipText
@@ -1332,6 +1360,7 @@ function Dewdrop:FeedAceOptionsTable(options, difference)
 		end
 	elseif options.type == "text" and type(options.validate) == "table" then
 		local current
+		local passValue = options.passValue
 		if type(options.get) == "function" then
 			current = options.get(passValue)
 		elseif options.get ~= false then
@@ -1545,37 +1574,39 @@ function OpenSlider(self, parent)
 			end
 			changed = true
 			local done = false
-			if sliderFrame.parent then
-				if sliderFrame.parent.sliderFunc then
-					local min = sliderFrame.parent.sliderMin or 0
-					local max = sliderFrame.parent.sliderMax or 1
-					local step = sliderFrame.parent.sliderStep or (max - min) / 100
-					local a1,a2,a3,a4 = sliderFrame.parent.sliderArg1, sliderFrame.parent.sliderArg2, sliderFrame.parent.sliderArg3, sliderFrame.parent.sliderArg4
-					local value = (1 - slider:GetValue()) * (max - min) + min
-					if step > 0 then
-						value = math.floor((value - min) / step + 0.5) * step + min
-						if value > max then
-							value = max
-						elseif value < min then
-							value = min
-						end
+			if sliderFrame.parent and sliderFrame.parent.sliderFunc then
+				local min = sliderFrame.parent.sliderMin or 0
+				local max = sliderFrame.parent.sliderMax or 1
+				local step = sliderFrame.parent.sliderStep or (max - min) / 100
+				local a1,a2,a3,a4 = sliderFrame.parent.sliderArg1, sliderFrame.parent.sliderArg2, sliderFrame.parent.sliderArg3, sliderFrame.parent.sliderArg4
+				local value = (1 - slider:GetValue()) * (max - min) + min
+				if step > 0 then
+					value = math.floor((value - min) / step + 0.5) * step + min
+					if value > max then
+						value = max
+					elseif value < min then
+						value = min
 					end
-					local text
-					if a1 == nil then
-						text = sliderFrame.parent.sliderFunc(value)
-					elseif a2 == nil then
-						text = sliderFrame.parent.sliderFunc(a1, value)
-					elseif a3 == nil then
-						text = sliderFrame.parent.sliderFunc(a1, a2, value)
-					elseif a4 == nil then
-						text = sliderFrame.parent.sliderFunc(a1, a2, a3, value)
-					else
-						text = sliderFrame.parent.sliderFunc(a1, a2, a3, a4, value)
-					end
-					if text then
-						sliderFrame.currentText:SetText(text)
-						done = true
-					end
+				end
+				if value == sliderFrame.lastValue then
+					return
+				end
+				sliderFrame.lastValue = value
+				local text
+				if a1 == nil then
+					text = sliderFrame.parent.sliderFunc(value)
+				elseif a2 == nil then
+					text = sliderFrame.parent.sliderFunc(a1, value)
+				elseif a3 == nil then
+					text = sliderFrame.parent.sliderFunc(a1, a2, value)
+				elseif a4 == nil then
+					text = sliderFrame.parent.sliderFunc(a1, a2, a3, value)
+				else
+					text = sliderFrame.parent.sliderFunc(a1, a2, a3, a4, value)
+				end
+				if text then
+					sliderFrame.currentText:SetText(text)
+					done = true
 				end
 			end
 			if not done then
@@ -1685,6 +1716,8 @@ function OpenSlider(self, parent)
 		sliderFrame.currentText:SetText(parent.sliderValue)
 	end
 
+	sliderFrame.lastValue = parent.sliderValue
+	
 	local level = parent.level
 	sliderFrame:Show()
 	sliderFrame:ClearAllPoints()
@@ -1799,35 +1832,40 @@ function OpenEditBox(self, parent)
 			if editBoxFrame.parent and editBoxFrame.parent.editBoxValidateFunc then
 				local a1,a2,a3,a4 = editBoxFrame.parent.editBoxValidateArg1, editBoxFrame.parent.editBoxValidateArg2, editBoxFrame.parent.editBoxValidateArg3, editBoxFrame.parent.editBoxValidateArg4
 
+				local t = editBox.realText or editBox:GetText() or ""
 				local result
 				if a1 == nil then
-					result = editBoxFrame.parent.editBoxValidateFunc(editBox:GetText() or "")
+					result = editBoxFrame.parent.editBoxValidateFunc(t)
 				elseif a2 == nil then
-					result = editBoxFrame.parent.editBoxValidateFunc(a1, editBox:GetText() or "")
+					result = editBoxFrame.parent.editBoxValidateFunc(a1, t)
 				elseif a3 == nil then
-					result = editBoxFrame.parent.editBoxValidateFunc(a1, a2, editBox:GetText() or "")
+					result = editBoxFrame.parent.editBoxValidateFunc(a1, a2, t)
 				elseif a4 == nil then
-					result = editBoxFrame.parent.editBoxValidateFunc(a1, a2, a3, editBox:GetText() or "")
+					result = editBoxFrame.parent.editBoxValidateFunc(a1, a2, a3, t)
 				else
-					result = editBoxFrame.parent.editBoxValidateFunc(a1, a2, a3, a4, editBox:GetText() or "")
+					result = editBoxFrame.parent.editBoxValidateFunc(a1, a2, a3, a4, t)
 				end
 				if not result then
-					message("Validation error: [" .. tostring(text) .. "]")
+					UIErrorsFrame:AddMessage(VALIDATION_ERROR, 1, 0, 0)
 					return
 				end
 			end
 			if editBoxFrame.parent and editBoxFrame.parent.editBoxFunc then
 				local a1,a2,a3,a4 = editBoxFrame.parent.editBoxArg1, editBoxFrame.parent.editBoxArg2, editBoxFrame.parent.editBoxArg3, editBoxFrame.parent.editBoxArg4
+				local t
+				if editBox.realText ~= "NONE" then
+					t = editBox.realText or editBox:GetText() or ""
+				end
 				if a1 == nil then
-					editBoxFrame.parent.editBoxFunc(editBox:GetText() or "")
+					editBoxFrame.parent.editBoxFunc(t)
 				elseif a2 == nil then
-					editBoxFrame.parent.editBoxFunc(a1, editBox:GetText() or "")
+					editBoxFrame.parent.editBoxFunc(a1, t)
 				elseif a3 == nil then
-					editBoxFrame.parent.editBoxFunc(a1, a2, editBox:GetText() or "")
+					editBoxFrame.parent.editBoxFunc(a1, a2, t)
 				elseif a4 == nil then
-					editBoxFrame.parent.editBoxFunc(a1, a2, a3, editBox:GetText() or "")
+					editBoxFrame.parent.editBoxFunc(a1, a2, a3, t)
 				else
-					editBoxFrame.parent.editBoxFunc(a1, a2, a3, a4, editBox:GetText() or "")
+					editBoxFrame.parent.editBoxFunc(a1, a2, a3, a4, t)
 				end
 			end
 			self:Close(editBoxFrame.level)
@@ -1859,17 +1897,21 @@ function OpenEditBox(self, parent)
 				skipNext = false
 			elseif not changing and editBoxFrame.parent and editBoxFrame.parent.editBoxChangeFunc then
 				local a1,a2,a3,a4 = editBoxFrame.parent.editBoxChangeArg1, editBoxFrame.parent.editBoxChangeArg2, editBoxFrame.parent.editBoxChangeArg3, editBoxFrame.parent.editBoxChangeArg4
+				local t
+				if editBox.realText ~= "NONE" then
+					t = editBox.realText or editBox:GetText() or ""
+				end
 				local text
 				if a1 == nil then
-					text = editBoxFrame.parent.editBoxChangeFunc(editBox:GetText() or "")
+					text = editBoxFrame.parent.editBoxChangeFunc(t)
 				elseif a2 == nil then
-					text = editBoxFrame.parent.editBoxChangeFunc(a1, editBox:GetText() or "")
+					text = editBoxFrame.parent.editBoxChangeFunc(a1, t)
 				elseif a3 == nil then
-					text = editBoxFrame.parent.editBoxChangeFunc(a1, a2, editBox:GetText() or "")
+					text = editBoxFrame.parent.editBoxChangeFunc(a1, a2, t)
 				elseif a4 == nil then
-					text = editBoxFrame.parent.editBoxChangeFunc(a1, a2, a3, editBox:GetText() or "")
+					text = editBoxFrame.parent.editBoxChangeFunc(a1, a2, a3, t)
 				else
-					text = editBoxFrame.parent.editBoxChangeFunc(a1, a2, a3, a4, editBox:GetText() or "")
+					text = editBoxFrame.parent.editBoxChangeFunc(a1, a2, a3, a4, t)
 				end
 				if text then
 					editBox:SpecialSetText(text)
@@ -1888,13 +1930,98 @@ function OpenEditBox(self, parent)
 		editBox:SetScript("OnLeave", function()
 			StartCounting(self, editBoxFrame.level)
 		end)
+		editBoxFrame:SetScript("OnKeyDown", function()
+			if not editBox.keybinding then
+				return
+			end
+			local arg1 = arg1
+			local screenshotKey = GetBindingKey("SCREENSHOT")
+			if screenshotKey and arg1 == screenshotKey then
+				Screenshot()
+				return
+			end
+			
+			if arg1 == "LeftButton" then
+				arg1 = "BUTTON1"
+			elseif arg1 == "RightButton" then
+				arg1 = "BUTTON2"
+			elseif arg1 == "MiddleButton" then
+				arg1 = "BUTTON3"
+			elseif arg1 == "Button4" then
+				arg1 = "BUTTON4"
+			elseif arg1 == "Button5" then
+				arg1 = "BUTTON5"
+			end
+			if arg1 == "BUTTON1" or arg1 == "BUTTON2" or arg1 == "UNKNOWN" then
+				return
+			elseif arg1 == "SHIFT" or arg1 == "CTRL" or arg1 == "ALT" then
+				return
+			elseif arg1 == "ENTER" then
+				return editBox:GetScript("OnEnterPressed")()
+			elseif arg1 == "ESCAPE" then
+				if editBox.realText == "NONE" then
+					return editBox:GetScript("OnEscapePressed")()
+				else
+					editBox:SpecialSetText(NONE or "NONE")
+					editBox.realText = "NONE"
+					return
+				end
+			end
+			local s = GetBindingText(arg1, "KEY_")
+			local real = arg1
+			if IsShiftKeyDown() then
+				s = "SHIFT-" .. s
+				real = "SHIFT-" .. real
+			end
+			if IsControlKeyDown() then
+				s = "CTRL-" .. s
+				real = "CTRL-" .. real
+			end
+			if IsAltKeyDown() then
+				s = "ALT-" .. s
+				real = "ALT-" .. real
+			end
+			if editBox:GetText() ~= s then
+				editBox:SpecialSetText(s)
+				editBox.realText = real
+				return editBox:GetScript("OnTextChanged")()
+			end
+		end)
+		editBoxFrame:SetScript("OnMouseDown", editBoxFrame:GetScript("OnKeyDown"))
+		editBox:SetScript("OnMouseDown", editBoxFrame:GetScript("OnKeyDown"))
 	end
 	editBoxFrame.parent = parent
 	editBoxFrame.level = parent.level.num + 1
 	editBoxFrame.parentValue = parent.level.value
 	editBoxFrame:SetFrameLevel(parent.level:GetFrameLevel() + 3)
 	editBoxFrame.editBox:SetFrameLevel(editBoxFrame:GetFrameLevel() + 1)
+	editBoxFrame.editBox.realText = nil
+	
+	if parent.editBoxIsKeybinding then
+		local s = parent.editBoxText
+		editBoxFrame.editBox.realText = s
+		if s and s ~= "" then
+			local _,_,alpha,bravo = string.find("^(.+)%-(.+)$", s)
+			if not bravo then
+				alpha = nil
+				bravo = s
+			end
+			bravo = GetBindingText(bravo, "KEY_")
+			if alpha then
+				editBoxFrame.editBox:SpecialSetText(string.upper(alpha) .. "-" .. bravo)
+			else
+				editBoxFrame.editBox:SpecialSetText(bravo)
+			end
+		else
+			editBoxFrame.editBox:SpecialSetText(NONE or "NONE")
+		end
+	else
 	editBoxFrame.editBox:SpecialSetText(parent.editBoxText)
+	end
+	
+	editBoxFrame.editBox.keybinding = parent.editBoxIsKeybinding
+	editBoxFrame.editBox:EnableKeyboard(not parent.editBoxIsKeybinding)
+	editBoxFrame:EnableKeyboard(parent.editBoxIsKeybinding)
 
 	if parent.arrow then
 --		parent.arrow:SetVertexColor(0.2, 0.6, 0)
@@ -2337,7 +2464,7 @@ function Dewdrop:AddLine(k1, v1, k2, v2, k3, v3, k4, v4, k5, v5, k6, v6, k7, v7,
 		end
 		if info.iconCoordLeft and info.iconCoordRight and info.iconCoordTop and info.iconCoordBottom then
 			button.check:SetTexCoord(info.iconCoordLeft, info.iconCoordRight, info.iconCoordTop, info.iconCoordBottom)
-		elseif string.find(info.checkIcon, "^Interface\\Icons\\") then
+		elseif string.find(info.icon, "^Interface\\Icons\\") then
 			button.check:SetTexCoord(0.05, 0.95, 0.05, 0.95)
 		else
 			button.check:SetTexCoord(0, 1, 0, 1)
@@ -2424,6 +2551,7 @@ function Dewdrop:AddLine(k1, v1, k2, v2, k3, v3, k4, v4, k5, v5, k6, v6, k7, v7,
 			button.editBoxValidateArg2 = info.editBoxValidateArg2
 			button.editBoxValidateArg3 = info.editBoxValidateArg3
 			button.editBoxValidateArg4 = info.editBoxValidateArg4
+			button.editBoxIsKeybinding = info.editBoxIsKeybinding
 		else
 			button.value = info.value
 		end
