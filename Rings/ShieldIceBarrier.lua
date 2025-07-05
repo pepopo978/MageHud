@@ -41,6 +41,12 @@ function module:Update()
 		self.ShieldPerc:Hide()
 	end
 
+	if (self.db.profile.ShowLabel) then
+		self.Label:Show()
+	else
+		self.Label:Hide()
+	end
+
 	if (self.db.profile.Outline) then
 		self.f.BG:Show()
 	else
