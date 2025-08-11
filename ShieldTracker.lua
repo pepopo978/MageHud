@@ -69,6 +69,7 @@ local spellIdAbsorbAmounts = {
 	[19441] = 1124, -- Voidwalker sacrifice
 	[19442] = 1503, -- Voidwalker sacrifice
 	[19443] = 1931, -- Voidwalker sacrifice
+	[52585] = 350, -- Guardian's Barrier
 }
 
 local targetedShields = {
@@ -163,6 +164,7 @@ local spellIdToBuffName = {
 	[19441] = "Sacrifice", -- Voidwalker sacrifice lvl 40
 	[19442] = "Sacrifice", -- Voidwalker sacrifice lvl 48
 	[19443] = "Sacrifice", -- Voidwalker sacrifice lvl 60
+	[52585] = "Guardian's Barrier", -- Guardian's Barrier
 }
 
 local buffNameToShieldTypes = {
@@ -172,6 +174,7 @@ local buffNameToShieldTypes = {
 	["The Burrower\'s Shell"] = { "Physical", "Frost", "Fire", "Arcane", "Shadow", "Nature", "Holy" },
 	["Power Word\: Shield"] = { "Physical", "Frost", "Fire", "Arcane", "Shadow", "Nature", "Holy" },
 	["Sacrifice"] = { "Physical", "Frost", "Fire", "Arcane", "Shadow", "Nature", "Holy" },
+	["Guardian's Barrier"] = { "Physical", "Frost", "Fire", "Arcane", "Shadow", "Nature", "Holy" },
 
 	["Frost Resistance"] = { "Frost" }, -- frost deflector
 	["Fire Resistance"] = { "Fire" }, -- fire deflector
@@ -194,6 +197,7 @@ local buffNameToColors = {
 	["The Burrower\'s Shell"] = { ["r"] = 1, ["g"] = 1, ["b"] = 1 },
 	["Power Word\: Shield"] = { ["r"] = 1, ["g"] = 1, ["b"] = 1 },
 	["Sacrifice"] = { ["r"] = 1, ["g"] = 1, ["b"] = 1 },
+	["Guardian's Barrier"] = { ["r"] = 1, ["g"] = 1, ["b"] = 1 },
 
 	-- physical
 	["Mana Shield"] = { ["r"] = 0, ["g"] = 0, ["b"] = 1 },
@@ -525,4 +529,3 @@ function MageHUD:DeathEvent()
 	}
 	MageHUD:TriggerEvent("MAGEHUD_SHIELD_UPDATE")
 end
-
