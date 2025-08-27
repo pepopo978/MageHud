@@ -1,6 +1,7 @@
 ## Interface: 11200
 ## Title: MageHUD |cff7fff7f -Ace2-|r
 ## Notes: Mage HUD based on NurfedHUD.
+## Notes-ruRU: Mage HUD на основе NurfedHUD.
 ## Author: Uruloke, Balakinuser, Pepopo
 ## SavedVariables: MageHUDDB
 ## Version: 2.0
@@ -31,6 +32,7 @@ Libs\FuBarPlugin\FuBarPlugin-2.0.lua
 
 # Core addon
 Locale_enUS.lua
+Locale_ruRU.lua
 Core.xml
 Core.lua
 Utils.lua
