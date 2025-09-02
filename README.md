@@ -76,7 +76,7 @@ Separate shields
 
 ### About this repository
 
-This is build specifically for turtle wow and requires https://github.com/balakethelock/SuperWoW
+This requires https://github.com/balakethelock/SuperWoW
 
 ## Installation
 
